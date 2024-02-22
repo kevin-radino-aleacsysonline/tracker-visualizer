@@ -1,0 +1,20 @@
+{
+    "projects": [
+        {
+            "id": "game-mythical-fruits",
+            "name": "Game Mythical Fruits",
+            "description": "The client of mythical fruits",
+            "repository": "http://...",
+            "type": "game-client",
+            "updates": ["game-mythical-fruits-deploy-wgp-dev"],
+            "commits": ["ae05cg9b"],
+            "versions": ["v1.1.23"],
+            "environments": [
+                {
+                    "id": "wgp-dev",
+                    "latest": "game-mythical-fruits-deploy-wgp-dev"
+                }
+            ]
+        }
+    ]
+}
