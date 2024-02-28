@@ -1,9 +1,8 @@
 import { EnvironmentType } from './environmentTypes';
+import { IIdentifiable } from './identifiable';
 import { ProjectReference } from './references';
 
-export interface Environment {
-    id: string;
-    name: string;
+export interface Environment extends IIdentifiable {
     description: string;
     link: string;
     type: EnvironmentType;
