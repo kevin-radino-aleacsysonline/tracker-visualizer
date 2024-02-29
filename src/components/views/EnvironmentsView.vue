@@ -1,4 +1,9 @@
 <template>
+    <!-- TODO 
+        - make /environments landing page
+        - check if id in route is empty
+        - fix list icons on the side, now they all say E
+    -->
     <template v-if="isArray">
         <view-template :dataType="route.name!.toString().toLowerCase()" :ids="(ids as string[])"></view-template>
     </template>
