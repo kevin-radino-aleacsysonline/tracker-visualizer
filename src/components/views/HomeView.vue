@@ -1,29 +1,13 @@
 <template>
-    <p v-if="!dataLoaded">Loading Environments...</p>
-    <p v-else>Loaded Environments</p>
-    <!-- <p>Loading Projects...</p> -->
-    <!-- <p>Loading Updates...</p> -->
+    <v-btn @click="toggleTheme">toggle theme</v-btn>
 </template>
 
-<script lang="ts">
-import { wait } from '../../utils';
-import _ from 'lodash';
+<script setup lang="ts">
+import { useTheme } from 'vuetify';
 
-export default {
-    data() {
-        return {
-            dataLoaded: false,
-            timeToWait: 0,
-        };
-    },
-    methods: {
-        async fetchData() {
-            await wait(1000);
-        },
-    },
-    async created() {
-        await this.fetchData();
-        this.dataLoaded = true;
-    },
-};
+const theme = useTheme();
+
+function toggleTheme() {
+    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
+}
 </script>

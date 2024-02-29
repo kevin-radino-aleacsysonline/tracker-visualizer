@@ -1,13 +1,13 @@
 import { IIdentifiable } from './identifiable';
 import { ProjectType } from './projectTypes';
-import { EnvironmentReference } from './references';
+import { Reference } from './references';
 
 export interface Project extends IIdentifiable {
     description: string;
     repository: string;
     type: ProjectType;
-    updates: string[];
+    updates: Reference[];
     commits: string[];
     versions: string[];
-    environments: EnvironmentReference[];
+    environments: Reference[];
 }

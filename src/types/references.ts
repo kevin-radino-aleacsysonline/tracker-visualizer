@@ -1,9 +1,4 @@
-export interface ProjectReference {
+export interface Reference {
     id: string;
-    latest: string;
-}
-
-export interface EnvironmentReference {
-    id: string;
-    latest: string;
+    latest?: string;
 }

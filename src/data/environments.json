@@ -4,13 +4,30 @@
             "id": "wgp-dev",
             "name": "WGP Development",
             "description": "AWS hosted k8s environment for WGP development",
-            "link": "http://...",
+            "link": "",
             "type": "cluster-namespace",
-            "updates": ["game-mythical-fruits-deploy-wgp-dev"],
+            "updates": [
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "update-1" },
+                { "id": "update-2" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" },
+                { "id": "game-mythical-fruits-deploy-wgp-dev" }
+            ],
             "projects": [
                 {
                     "id": "game-mythical-fruits",
                     "latest": "game-mythical-fruits-deploy-wgp-dev"
+                },
+                {
+                    "id": "game-dragon-dice",
+                    "latest": "game-dragon-dice-deploy-wgp-dev"
                 }
             ]
         },
@@ -18,7 +35,7 @@
             "id": "verdaccio",
             "name": "Verdaccio",
             "description": "Aleacsys Online internally hosted node package registry",
-            "link": "https://verdaccio.cluster.gp.be.",
+            "link": "https://verdaccio.cluster.gp.be",
             "type": "registry",
             "updates": [],
             "projects": []

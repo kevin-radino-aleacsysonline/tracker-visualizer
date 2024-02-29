@@ -1,9 +1,9 @@
 <template>
     <template v-if="isArray">
-        <view-template :dataType="dataType" :ids="(ids as string[])"></view-template>
+        <view-template :dataType="route.name!.toString().toLowerCase()" :ids="(ids as string[])"></view-template>
     </template>
     <template v-else>
-        <view-template :dataType="dataType" :id="(ids as string)"></view-template>
+        <view-template :dataType="route.name!.toString().toLowerCase()" :id="(ids as string)"></view-template>
     </template>
 </template>
 
@@ -11,14 +11,14 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import ViewTemplate from '../ViewTemplate.vue';
-import { DataType } from '../../types/dataTypes';
 
 const route = useRoute();
 const ids = ref(route.params.id);
-const dataType = DataType.Environments;
 var isArray = ref(true);
 
 onMounted(async () => {
     isArray.value = Array.isArray(ids.value);
+
+    console.error(route);
 });
 </script>
