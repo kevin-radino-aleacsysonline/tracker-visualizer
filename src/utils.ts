@@ -11,6 +11,6 @@ export function stringToEnum<T extends string>(str: string, enumType: T): T | un
 }
 
 export function isValidURL(url: string): boolean {
-    const regex: RegExp = /^(ftp|http|https):\/\/[^ "]+$/;
+    const regex: RegExp = /^(https?:\/\/)?([\w-]+\.)*[\w-]+(:\d+)?(\/\S*)?$/;
     return regex.test(url);
 }

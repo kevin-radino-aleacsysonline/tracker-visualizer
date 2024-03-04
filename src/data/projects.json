@@ -6,13 +6,45 @@
             "description": "The client of mythical fruits",
             "repository": "http://...",
             "type": "game-client",
-            "updates": ["game-mythical-fruits-deploy-wgp-dev"],
-            "commits": ["ae05cg9b"],
+            "commits": ["ae05cg9b", "ap55de9b"],
             "versions": ["v1.1.23"],
+            "updates": [{ "id": "game-mythical-fruits-deploy-wgp-dev" }],
             "environments": [
                 {
                     "id": "wgp-dev",
                     "latest": "game-mythical-fruits-deploy-wgp-dev"
+                }
+            ]
+        },
+        {
+            "id": "game-dragon-dice",
+            "name": "Game Dragon Dice",
+            "description": "The client of dragon dice",
+            "repository": "https://github.com/Aleacsys-Online/game-dragon-dice",
+            "type": "game-client",
+            "commits": ["qkqyg680", "ple2cqnx"],
+            "versions": ["v1.1.3"],
+            "updates": [{ "id": "game-dragon-dice-deploy-wgp-dev" }],
+            "environments": [
+                {
+                    "id": "wgp-dev",
+                    "latest": "game-dragon-dice-deploy-wgp-dev"
+                }
+            ]
+        },
+        {
+            "id": "game-multi-jackpot-wilds",
+            "name": "Game Multi Jackpot Wilds",
+            "description": "The client of multi jackpot wilds",
+            "repository": "https://github.com/Aleacsys-Online/game-multi-jackpot-wilds",
+            "type": "game-client",
+            "commits": ["ykanbk95", "s64fdt4w", "naa4l4hu", "poxdc3vf", "zmmr9jad", "6hyff3bu"],
+            "versions": ["v1.0.4"],
+            "updates": [{ "id": "game-multi-jackpot-wilds-deploy-wgp-dev" }],
+            "environments": [
+                {
+                    "id": "wgp-dev",
+                    "latest": "game-multi-jackpot-wilds-deploy-wgp-dev"
                 }
             ]
         }

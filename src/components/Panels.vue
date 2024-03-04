@@ -3,19 +3,21 @@
         <v-expansion-panel v-for="(item, index) in props.requestedObjects" :key="index">
             <v-expansion-panel-title>
                 <v-row class="align-center">
-                    <v-col>
+                    <v-col cols="10">
                         <v-row class="align-center">
-                            <v-col>
+                            <v-col cols="4">
                                 {{ getPanelName(item) }}
+                            </v-col>
+                            <v-col cols="3">
+                                <chip-type-component>{{ item.type }}</chip-type-component>
                             </v-col>
                             <v-col>
                                 <copy-text-component class="copy-element" :text="'@' + item.id" :stop="true"></copy-text-component>
                             </v-col>
-                            <v-col></v-col>
                         </v-row>
                     </v-col>
                     <v-col cols="2">
-                        <link-button-component :link="item.link"></link-button-component>
+                        <link-button-component :link="item.link ?? item.repository ?? ''"></link-button-component>
                     </v-col>
                 </v-row>
             </v-expansion-panel-title>
@@ -34,6 +36,7 @@ import { IIdentifiable } from '../types/identifiable';
 import TableComponent from '../components/TableComponent.vue';
 import CopyTextComponent from './CopyTextComponent.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
+import ChipTypeComponent from './ChipTypeComponent.vue';
 
 const props = defineProps({
     requestedObjects: {
@@ -69,7 +72,7 @@ function getPanelName(item: IIdentifiable): string {
 }
 
 .v-expansion-panel-title {
-    font-size: 1.3em; /* Increase font size of the panel title */
+    font-size: 1.1em; /* Increase font size of the panel title */
 }
 
 .bigger-panel .v-expansion-panel .v-expansion-panel-text {

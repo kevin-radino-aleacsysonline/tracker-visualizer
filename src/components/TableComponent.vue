@@ -6,7 +6,7 @@
                     :type="(key as InfoType)"
                     :value="!Array.isArray(value) && typeof value === 'string' ? value : undefined"
                     :value-array="Array.isArray(value) ? value : undefined"
-                    :value-object="typeof value === 'object' ? value : undefined"
+                    :value-object="typeof value === 'object' && !Array.isArray(value) ? value : undefined"
                 ></table-row>
             </template>
         </template>

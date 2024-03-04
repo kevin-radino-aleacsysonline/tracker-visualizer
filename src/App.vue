@@ -2,7 +2,6 @@
     <v-app class="dark-background">
         <v-layout>
             <v-app-bar>
-                <!-- <v-app-bar-nav-icon v-if="isMobile" @click="toggleDrawer"></v-app-bar-nav-icon> -->
                 <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="toggleDrawer"></v-app-bar-nav-icon>
                 <v-app-bar-title>Update Tracker</v-app-bar-title>
                 <toggle-theme-component></toggle-theme-component>
@@ -12,12 +11,9 @@
                     <!-- <v-divider></v-divider> -->
                     <!-- <v-list-item prepend-icon="mdi-home-circle" title="Home" link to="/"></v-list-item> -->
                     <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-alpha-e-circle-outline" title="Environments" link :to="{ name: 'Environments', params: { id: ['all'] } }"></v-list-item>
-                    <!-- <v-list-item prepend-icon="mdi-sprout" title="Environments" link to="/environments"></v-list-item> -->
-                    <v-list-item prepend-icon="mdi-alpha-e-circle-outline" title="Projects" link :to="{ name: 'Projects', params: { id: ['all'] } }"></v-list-item>
-                    <!-- <v-list-item prepend-icon="mdi-lightbulb-variant" title="Projects" link to="/projects"></v-list-item> -->
-                    <v-list-item prepend-icon="mdi-alpha-e-circle-outline" title="Updates" link :to="{ name: 'Updates', params: { id: ['all'] } }"></v-list-item>
-                    <!-- <v-list-item prepend-icon="mdi-update" title="Updates" link to="/updates"></v-list-item> -->
+                    <v-list-item prepend-icon="mdi-sprout" color="green" title="Environments" :to="{ name: 'Environments', params: { id: ['all'] } }"></v-list-item>
+                    <v-list-item prepend-icon="mdi-lightbulb-variant" color="primary" title="Projects" :to="{ name: 'Projects', params: { id: ['all'] } }"></v-list-item>
+                    <v-list-item prepend-icon="mdi-update" color="orange" title="Updates" :to="{ name: 'Updates', params: { id: ['all'] } }"></v-list-item>
                 </v-list>
             </v-navigation-drawer>
             <v-main class="d-flex justify-center"><router-view /> </v-main>

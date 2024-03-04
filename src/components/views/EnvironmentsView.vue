@@ -1,8 +1,6 @@
 <template>
     <!-- TODO 
-        - make /environments landing page
         - check if id in route is empty
-        - fix list icons on the side, now they all say E
     -->
     <template v-if="isArray">
         <view-template :dataType="route.name!.toString().toLowerCase()" :ids="(ids as string[])"></view-template>
@@ -13,17 +11,21 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import ViewTemplate from '../ViewTemplate.vue';
 
 const route = useRoute();
-const ids = ref(route.params.id);
+var ids = ref(route.params.id);
 var isArray = ref(true);
+
+onBeforeMount(() => {
+    if (ids.value === '' || !ids) {
+        ids.value = ['all'];
+    }
+});
 
 onMounted(async () => {
     isArray.value = Array.isArray(ids.value);
-
-    console.error(route);
 });
 </script>

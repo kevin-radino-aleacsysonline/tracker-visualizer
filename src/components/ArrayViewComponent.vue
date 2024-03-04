@@ -3,11 +3,22 @@
         <v-expansion-panel :disabled="!expand">
             <v-expansion-panel-title><slot>default</slot></v-expansion-panel-title>
             <v-expansion-panel-text>
-                <!-- <div :class="['padding', { scrollable: dataArray.length > 5 }]"> -->
                 <div class="padding">
                     <v-row class="align-baseline">
                         <v-col v-for="(value, index) in dataArray" :key="index" cols="12" sm="4">
-                            <card-link-component :referenceData="value"></card-link-component>
+                            <value-clickable-card-component v-if="type === 'object' && value as Reference !== null" :onClicked="() => clickedCard((value as Reference).id)">
+                                <template #title>
+                                    {{ (value as Reference).id }}
+                                </template>
+                                <template #content v-if="(value as Reference).latest">
+                                    {{ (value as Reference).latest }}
+                                </template>
+                            </value-clickable-card-component>
+                            <value-card-component v-if="type !== 'object'">
+                                <template #title>
+                                    {{ value }}
+                                </template>
+                            </value-card-component>
                         </v-col>
                     </v-row>
                 </div>
@@ -17,19 +28,23 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { Reference } from '../types/references';
-import CardLinkComponent from './CardLinkComponent.vue';
-defineProps<{ expand: boolean; dataArray: Reference[] }>();
+import ValueCardComponent from './ValueCardComponent.vue';
+import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
+const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
+
+const router = useRouter();
+
+function clickedCard(id: string) {
+    router.push('/' + props.routeTo + '/' + id);
+}
 </script>
 
 <style scoped>
-.scrollable {
-    max-height: 512px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
 .padding {
     padding-right: 8px;
     padding-top: 8px;
 }
 </style>
+./ReferenceCardLinkComponent.vue

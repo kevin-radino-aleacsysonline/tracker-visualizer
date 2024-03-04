@@ -6,8 +6,8 @@ export interface Project extends IIdentifiable {
     description: string;
     repository: string;
     type: ProjectType;
-    updates: Reference[];
     commits: string[];
     versions: string[];
+    updates: Reference[];
     environments: Reference[];
 }

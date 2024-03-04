@@ -13,10 +13,13 @@ import { useRoute } from 'vue-router';
 import ViewTemplate from '../ViewTemplate.vue';
 
 const route = useRoute();
-const ids = ref(route.params.id);
+var ids = ref(route.params.id);
 var isArray = ref(true);
 
 onMounted(async () => {
+    if (ids.value === '' || !ids) {
+        ids.value = 'all';
+    }
     isArray.value = Array.isArray(ids.value);
 });
 </script>

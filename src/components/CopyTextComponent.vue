@@ -1,12 +1,12 @@
 <template>
-    <div v-if="!props.stop" class="copy-to-clipboard" @click="copyToClipboard">
+    <div v-if="!props.stop" class="copy-to-clipboard">
         <transition name="fade" mode="out-in">
-            <span :key="displayText">{{ displayText }}</span>
+            <span :key="displayText" @click="copyToClipboard">{{ displayText }}</span>
         </transition>
     </div>
-    <div v-else class="copy-to-clipboard" @click.stop="copyToClipboard">
+    <div v-else class="copy-to-clipboard">
         <transition name="fade" mode="out-in">
-            <span :key="displayText">{{ displayText }}</span>
+            <span :key="displayText" @click.stop="copyToClipboard">{{ displayText }}</span>
         </transition>
     </div>
 </template>

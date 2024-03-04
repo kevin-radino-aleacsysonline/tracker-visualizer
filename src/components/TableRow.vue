@@ -3,22 +3,23 @@
         <tr>
             <td class="fixed-width">{{ capitalize(type!) }}</td>
             <td>
-                <template v-if="type === InfoType.Description">
-                    {{ value }}
-                </template>
-                <template v-else-if="type === InfoType.Type">
-                    {{ value }}
-                </template>
-                <template v-else>
-                    <h5>{{ type }}</h5>
-                </template>
+                <h5>
+                    {{ value ?? '' }}
+                    {{ valueArray ?? '' }}
+                    {{ valueObject ?? '' }}
+                </h5>
             </td>
         </tr>
     </template>
     <template v-else>
-        <tr v-if="type === InfoType.Updates || type === InfoType.Projects">
+        <tr v-if="type === InfoType.Description">
+            <td colspan="2" color="accent" class="description">
+                {{ value }}
+            </td>
+        </tr>
+        <tr v-else>
             <td colspan="2">
-                <array-view-component :expand="valueArray!.length > 0" :data-array="valueArray!">
+                <array-view-component :expand="valueArray!.length > 0" :data-array="valueArray!" :type="typeof valueArray?.at(0)" :routeTo="type">
                     <div class="icon">
                         <v-icon color="primary"> mdi-numeric-{{ valueArray!.length <= 9 ? valueArray!.length : '9-plus' }}-box-multiple-outline</v-icon>
                     </div>
@@ -34,9 +35,8 @@ import { capitalize } from 'lodash';
 import { InfoType } from '../types/infoTypes';
 import { HIDDEN_ID_IN_TABLE_ARR } from '../types/constants';
 import ArrayViewComponent from './ArrayViewComponent.vue';
-import { Reference } from '../types/references';
 
-defineProps<{ type: InfoType; value?: string; valueArray?: Reference[]; valueObject?: object }>();
+defineProps<{ type: InfoType; value?: string; valueArray?: []; valueObject?: object }>();
 </script>
 
 <style scoped>
@@ -51,5 +51,9 @@ h5 {
 }
 .icon {
     padding-right: 8px;
+}
+.description {
+    font-style: italic;
+    color: #888;
 }
 </style>
