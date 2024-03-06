@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panels multiple>
+    <v-expansion-panels>
         <v-expansion-panel v-for="(item, index) in props.requestedObjects" :key="index">
             <v-expansion-panel-title>
                 <v-row class="align-center">
@@ -9,7 +9,7 @@
                                 {{ getPanelName(item) }}
                             </v-col>
                             <v-col cols="3">
-                                <chip-type-component>{{ item.type }}</chip-type-component>
+                                <chip-type-component :on-click-callback="() => onChipClick(item.type)">{{ item.type }}</chip-type-component>
                             </v-col>
                             <v-col>
                                 <copy-text-component class="copy-element" :text="'@' + item.id" :stop="true"></copy-text-component>
@@ -30,9 +30,11 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { DataType } from '../types/dataTypes';
 import { capitalize } from 'lodash';
 import { IIdentifiable } from '../types/identifiable';
+import { Update } from '../types/update';
 import TableComponent from '../components/TableComponent.vue';
 import CopyTextComponent from './CopyTextComponent.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
@@ -48,7 +50,7 @@ const props = defineProps({
         required: true,
     },
 });
-
+const router = useRouter();
 var dataType = ref(DataType.Environments);
 
 onMounted(() => {
@@ -58,8 +60,17 @@ onMounted(() => {
 function getPanelName(item: IIdentifiable): string {
     if (dataType.value !== DataType.Updates) {
         return item.name!;
+    } else {
+        const updateItem = item as Update;
+        return '[' + updateItem.environment + '] ' + updateItem.project;
     }
-    return 'test';
+}
+
+function onChipClick(type: string): void {
+    const query = {
+        filterType: type,
+    };
+    router.push({ query: query });
 }
 </script>
 
@@ -77,5 +88,8 @@ function getPanelName(item: IIdentifiable): string {
 
 .bigger-panel .v-expansion-panel .v-expansion-panel-text {
     font-size: 16px; /* Increase font size of the panel content */
+}
+.no-padding {
+    padding: 0;
 }
 </style>

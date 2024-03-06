@@ -3,11 +3,12 @@
         <tr>
             <td class="fixed-width">{{ capitalize(type!) }}</td>
             <td>
-                <h5>
-                    {{ value ?? '' }}
-                    {{ valueArray ?? '' }}
-                    {{ valueObject ?? '' }}
-                </h5>
+                <template v-if="value">
+                    {{ value }}
+                </template>
+                <template v-if="valueObject">
+                    <custom-object-component :custom-object="valueObject"></custom-object-component>
+                </template>
             </td>
         </tr>
     </template>
@@ -18,8 +19,8 @@
             </td>
         </tr>
         <tr v-else>
-            <td colspan="2">
-                <array-view-component :expand="valueArray!.length > 0" :data-array="valueArray!" :type="typeof valueArray?.at(0)" :routeTo="type">
+            <td>
+                <array-view-component :routeTo="type" :expand="valueArray!.length > 0" :data-array="valueArray!" :type="(typeof valueArray!.at(0))">
                     <div class="icon">
                         <v-icon color="primary"> mdi-numeric-{{ valueArray!.length <= 9 ? valueArray!.length : '9-plus' }}-box-multiple-outline</v-icon>
                     </div>
@@ -33,8 +34,11 @@
 <script setup lang="ts">
 import { capitalize } from 'lodash';
 import { InfoType } from '../types/infoTypes';
+import { UpdateOutput } from '../types/updateOutput';
+import { UpdateGit } from '../types/updateGit';
 import { HIDDEN_ID_IN_TABLE_ARR } from '../types/constants';
 import ArrayViewComponent from './ArrayViewComponent.vue';
+import CustomObjectComponent from './CustomObjectComponent.vue';
 
 defineProps<{ type: InfoType; value?: string; valueArray?: []; valueObject?: object }>();
 </script>
@@ -44,7 +48,7 @@ td {
     padding: 4px;
 }
 .fixed-width {
-    width: 20%;
+    width: 10%;
 }
 h5 {
     color: red;
@@ -57,3 +61,4 @@ h5 {
     color: #888;
 }
 </style>
+./CustomObjectComponent.vue
