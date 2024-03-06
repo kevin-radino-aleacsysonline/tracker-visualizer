@@ -34,8 +34,6 @@
 <script setup lang="ts">
 import { capitalize } from 'lodash';
 import { InfoType } from '../types/infoTypes';
-import { UpdateOutput } from '../types/updateOutput';
-import { UpdateGit } from '../types/updateGit';
 import { HIDDEN_ID_IN_TABLE_ARR } from '../types/constants';
 import ArrayViewComponent from './ArrayViewComponent.vue';
 import CustomObjectComponent from './CustomObjectComponent.vue';
