@@ -1,7 +1,7 @@
 <template>
-    <v-expansion-panels v-if="dataTypeString !== DataType.Updates">
+    <v-expansion-panels v-model="panels" v-if="dataTypeString !== DataType.Updates">
         <v-expansion-panel v-for="(item, index) in props.requestedObjects" :key="index">
-            <v-expansion-panel-title>
+            <v-expansion-panel-title @click="onTitleClick(index)">
                 <v-row class="align-center">
                     <v-col cols="10">
                         <v-row class="align-center">
@@ -9,12 +9,10 @@
                                 {{ getPanelName(item) }}
                             </v-col>
                             <v-col cols="3">
-                                <chip-type-component :on-click-callback="() => onChipClick(item.type)">{{ item.type }}</chip-type-component>
+                                <chip-type-component :on-click-callback="() => onChipClick(item.type, QueryInfoType.type)">{{ item.type }}</chip-type-component>
                             </v-col>
                             <v-col>
-                                <chip-type-component :on-click-callback="() => onChipClick(item.id)">{{ item.id }}</chip-type-component>
-
-                                <!-- <copy-text-component class="copy-element" :text="'@' + item.id" :stop="true"></copy-text-component> -->
+                                <chip-type-component :on-click-callback="() => onChipClick(item.id, QueryInfoType.id)">{{ item.id }}</chip-type-component>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -36,7 +34,7 @@
                     {{ new Date(item.timestamp) }}
                 </template>
                 <v-expansion-panel>
-                    <v-expansion-panel-title>
+                    <v-expansion-panel-title @click="onTitleClick(index)">
                         <v-row class="align-center">
                             <v-col cols="10">
                                 <v-row class="align-center">
@@ -44,10 +42,10 @@
                                         {{ getPanelName(item) }}
                                     </v-col>
                                     <v-col cols="3">
-                                        <chip-type-component :on-click-callback="() => onChipClick(item.type)">{{ item.type }}</chip-type-component>
+                                        <chip-type-component :on-click-callback="() => onChipClick(item.type, QueryInfoType.type)">{{ item.type }}</chip-type-component>
                                     </v-col>
                                     <v-col>
-                                        <copy-text-component class="copy-element" :text="'@' + item.id" :stop="true"></copy-text-component>
+                                        <chip-type-component :on-click-callback="() => onChipClick(item.id, QueryInfoType.id)">{{ item.id }}</chip-type-component>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -64,13 +62,14 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { DataType } from '../types/dataTypes';
 import { capitalize } from 'lodash';
 import { IIdentifiable } from '../types/identifiable';
 import { Update } from '../types/update';
+import { addOrUpdateFocus, addOrUpdateData } from '../controllers/urlQuery';
+import { QueryInfoType } from '../types/queryInfoType';
 import TableComponent from '../components/TableComponent.vue';
-import CopyTextComponent from './CopyTextComponent.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
 import ChipTypeComponent from './ChipTypeComponent.vue';
 
@@ -84,8 +83,8 @@ const props = defineProps({
         required: true,
     },
 });
-const router = useRouter();
 const route = useRoute();
+const panels = ref([]);
 var dataType = ref(DataType.Environments);
 
 onMounted(() => {
@@ -101,12 +100,17 @@ function getPanelName(item: IIdentifiable): string {
     }
 }
 
-function onChipClick(type: string): void {
-    const query = {
-        filterType: type,
-    };
-    const updatedQuery = { ...route.query, ...query };
-    router.push({ query: updatedQuery });
+function onChipClick(data: string, queryType: QueryInfoType): void {
+    addOrUpdateData(data, route, queryType);
+}
+
+function onTitleClick(stringIndex: string): void {
+    const index = Number(stringIndex);
+    if (index === Number.NaN) {
+        return;
+    }
+
+    addOrUpdateFocus(index, route);
 }
 </script>
 

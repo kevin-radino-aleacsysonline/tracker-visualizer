@@ -1,4 +1,4 @@
-import { InfoType } from './infoTypes';
+import { InfoType } from './types/infoTypes';
 
 export const ALL = 'all';
 export const DEFAULT_LINK = 'https://github.com/Aleacsys-Online';

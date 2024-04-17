@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { capitalize } from 'lodash';
 import { InfoType } from '../types/infoTypes';
-import { HIDDEN_ID_IN_TABLE_ARR } from '../types/constants';
+import { HIDDEN_ID_IN_TABLE_ARR } from '../constants';
 import ArrayViewComponent from './ArrayViewComponent.vue';
 import CustomObjectComponent from './CustomObjectComponent.vue';
 
@@ -59,3 +59,4 @@ h5 {
     color: #888;
 }
 </style>
+../constants

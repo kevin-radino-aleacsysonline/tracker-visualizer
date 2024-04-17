@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { isValidURL } from '../utils';
-import { DEFAULT_LINK } from '../types/constants';
+import { DEFAULT_LINK } from '../constants';
 defineProps<{ link: string }>();
 
 function navigateTo(url: string): void {
@@ -33,3 +33,4 @@ function navigateTo(url: string): void {
     right: -8px;
 }
 </style>
+../constants

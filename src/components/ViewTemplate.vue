@@ -12,7 +12,7 @@ import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { IIdentifiable } from '../types/identifiable';
 import Panels from '../components/Panels.vue';
-import { ALL } from '../types/constants';
+import { ALL } from '../constants';
 import { getEnvironments, getProjects, getUpdates } from '../controllers/dataController';
 import { DataType } from '../types/dataTypes';
 import _ from 'lodash';
@@ -122,3 +122,4 @@ watch(route, async () => {
     }
 });
 </script>
+../constants
