@@ -1,7 +1,7 @@
 <template>
-    <v-expansion-panels v-model="panels" v-if="dataTypeString !== DataType.Updates">
+    <v-expansion-panels v-if="dataTypeString !== DataType.Updates" v-model="panels">
         <v-expansion-panel v-for="(item, index) in props.requestedObjects" :key="index">
-            <v-expansion-panel-title @click="onTitleClick(index)">
+            <v-expansion-panel-title @click.stop="addOrRemoveData(index, route, QueryInfoType.focus)">
                 <v-row class="align-center">
                     <v-col cols="10">
                         <v-row class="align-center">
@@ -9,10 +9,10 @@
                                 {{ getPanelName(item) }}
                             </v-col>
                             <v-col cols="3">
-                                <chip-type-component :on-click-callback="() => onChipClick(item.type, QueryInfoType.type)">{{ item.type }}</chip-type-component>
+                                <chip-type-component :on-click-callback="() => addOrRemoveData(item.type, route, QueryInfoType.type)">{{ item.type }}</chip-type-component>
                             </v-col>
                             <v-col>
-                                <chip-type-component :on-click-callback="() => onChipClick(item.id, QueryInfoType.id)">{{ item.id }}</chip-type-component>
+                                <chip-type-component :on-click-callback="() => addOrRemoveData(item.id, route, QueryInfoType.id)">{{ item.id }}</chip-type-component>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -21,20 +21,18 @@
                     </v-col>
                 </v-row>
             </v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <table-component :item="item"></table-component>
-            </v-expansion-panel-text>
+            <v-expansion-panel-text><table-component :item="item"></table-component></v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
 
-    <v-expansion-panels v-else>
+    <v-expansion-panels v-else v-model="panels">
         <v-timeline side="end" style="width: 100%">
             <v-timeline-item v-for="(item, index) in requestedObjects" :key="index" width="100%" :dot-color="'primary'" :size="'small'">
                 <template v-slot:opposite>
-                    {{ new Date(item.timestamp) }}
+                    {{ formatDate(new Date(item.timestamp)) }}
                 </template>
                 <v-expansion-panel>
-                    <v-expansion-panel-title @click="onTitleClick(index)">
+                    <v-expansion-panel-title @click.stop="addOrRemoveData(index, route, QueryInfoType.focus)">
                         <v-row class="align-center">
                             <v-col cols="10">
                                 <v-row class="align-center">
@@ -42,10 +40,10 @@
                                         {{ getPanelName(item) }}
                                     </v-col>
                                     <v-col cols="3">
-                                        <chip-type-component :on-click-callback="() => onChipClick(item.type, QueryInfoType.type)">{{ item.type }}</chip-type-component>
+                                        <chip-type-component :on-click-callback="() => addOrRemoveData(item.type, route, QueryInfoType.type)">{{ item.type }}</chip-type-component>
                                     </v-col>
                                     <v-col>
-                                        <chip-type-component :on-click-callback="() => onChipClick(item.id, QueryInfoType.id)">{{ item.id }}</chip-type-component>
+                                        <chip-type-component :on-click-callback="() => addOrRemoveData(item.id, route, QueryInfoType.id)">{{ item.id }}</chip-type-component>
                                     </v-col>
                                 </v-row>
                             </v-col>
@@ -61,14 +59,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, Ref, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { DataType } from '../types/dataTypes';
 import { capitalize } from 'lodash';
 import { IIdentifiable } from '../types/identifiable';
 import { Update } from '../types/update';
-import { addOrUpdateFocus, addOrUpdateData } from '../controllers/urlQuery';
+import { addOrRemoveData } from '../controllers/urlQuery';
 import { QueryInfoType } from '../types/queryInfoType';
+import { formatDate } from '../controllers/dateFormatter';
 import TableComponent from '../components/TableComponent.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
 import ChipTypeComponent from './ChipTypeComponent.vue';
@@ -84,12 +83,25 @@ const props = defineProps({
     },
 });
 const route = useRoute();
-const panels = ref([]);
+var panels: Ref<number[]> = ref([]);
 var dataType = ref(DataType.Environments);
 
 onMounted(() => {
     dataType.value = DataType[capitalize(props.dataTypeString) as keyof typeof DataType];
 });
+
+watch(
+    route,
+    (r) => {
+        if (r.query === undefined || r.query.focus === undefined) {
+            panels.value = [];
+            return;
+        }
+        const index = Number(r.query.focus);
+        panels.value = [index];
+    },
+    { immediate: true }
+);
 
 function getPanelName(item: IIdentifiable): string {
     if (dataType.value !== DataType.Updates) {
@@ -98,19 +110,6 @@ function getPanelName(item: IIdentifiable): string {
         const updateItem = item as Update;
         return '[' + updateItem.environment + '] ' + updateItem.project;
     }
-}
-
-function onChipClick(data: string, queryType: QueryInfoType): void {
-    addOrUpdateData(data, route, queryType);
-}
-
-function onTitleClick(stringIndex: string): void {
-    const index = Number(stringIndex);
-    if (index === Number.NaN) {
-        return;
-    }
-
-    addOrUpdateFocus(index, route);
 }
 </script>
 
