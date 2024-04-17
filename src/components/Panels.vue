@@ -97,8 +97,7 @@ watch(
             panels.value = [];
             return;
         }
-        const index = Number(r.query.focus);
-        panels.value = [index];
+        panels.value = r.query.focus ? [Number(r.query.focus)] : [];
     },
     { immediate: true }
 );

@@ -16,6 +16,7 @@ import { ALL } from '../constants';
 import { getEnvironments, getProjects, getUpdates } from '../controllers/dataController';
 import { DataType } from '../types/dataTypes';
 import _ from 'lodash';
+import { QueryInfoType } from '../types/queryInfoType';
 
 var isLoading = ref(true);
 var fetchedData: Map<string, IIdentifiable> = new Map<string, IIdentifiable>();
@@ -104,8 +105,8 @@ async function FetchData(refreshData = true): Promise<void> {
     if (props.id) {
         AddSingleToRequests(props.id as string);
     }
-    if (route.query && route.query.filterType) {
-        FilterData('type', route.query.filterType as string);
+    if (route.query && route.query[QueryInfoType.type]) {
+        FilterData(QueryInfoType.type, route.query.type as string);
     }
     isLoading.value = false;
 }
@@ -115,11 +116,10 @@ onMounted(async () => {
 });
 
 watch(route, async () => {
-    if (route.query.filterType) {
-        FilterData('type', route.query.filterType as string);
+    if (route.query[QueryInfoType.type]) {
+        FilterData(QueryInfoType.type, route.query.type as string);
     } else {
         await FetchData(false);
     }
 });
 </script>
-../constants

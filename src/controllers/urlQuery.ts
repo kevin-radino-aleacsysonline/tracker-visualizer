@@ -23,6 +23,29 @@ function removeData(route: RouteLocationNormalizedLoaded, queryType: QueryInfoTy
     router.push({ query: currentQuery });
 }
 
+export function addToInnerFocus(data: string, route: RouteLocationNormalizedLoaded): void {
+    let currentQuery = route.query[QueryInfoType.innerFocus];
+    if (currentQuery === undefined || currentQuery === null) {
+        addOrUpdateData(data, route, QueryInfoType.innerFocus);
+    } else if (typeof currentQuery === 'string') {
+        if (currentQuery.includes(data)) {
+            const pattern = new RegExp('_?' + data);
+            currentQuery = currentQuery.replace(pattern, '');
+            if (currentQuery.length > 1 && currentQuery[0] === '_') {
+                currentQuery = currentQuery.slice(1);
+            }
+            if (currentQuery.length === 0) {
+                removeData(route, QueryInfoType.innerFocus);
+            } else {
+                addOrUpdateData(currentQuery, route, QueryInfoType.innerFocus);
+            }
+        } else {
+            currentQuery = currentQuery + `_${data}`;
+            addOrUpdateData(currentQuery, route, QueryInfoType.innerFocus);
+        }
+    }
+}
+
 function addOrUpdateData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     const query = {
         [queryType]: data,

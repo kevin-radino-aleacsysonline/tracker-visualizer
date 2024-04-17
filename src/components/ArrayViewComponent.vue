@@ -1,7 +1,7 @@
 <template>
-    <v-expansion-panels multiple>
+    <v-expansion-panels multiple v-model="panels">
         <v-expansion-panel :disabled="!expand">
-            <v-expansion-panel-title><slot>default</slot></v-expansion-panel-title>
+            <v-expansion-panel-title @click="onTitleClick()"><slot>default</slot></v-expansion-panel-title>
             <v-expansion-panel-text>
                 <div class="padding">
                     <v-row class="align-baseline">
@@ -28,17 +28,37 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { Reference } from '../types/references';
+import { ref, Ref, watch } from 'vue';
 import ValueCardComponent from './ValueCardComponent.vue';
 import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
+import { addToInnerFocus } from '../controllers/urlQuery';
 const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
 
 const router = useRouter();
+const route = useRoute();
+var panels: Ref<number[]> = ref([0]);
 
-function clickedCard(id: string) {
+function clickedCard(id: string): void {
     router.push('/' + props.routeTo + '/' + id);
 }
+
+function onTitleClick(): void {
+    addToInnerFocus(props.routeTo, route);
+}
+
+watch(
+    route,
+    (r) => {
+        if (r.query === undefined || r.query.innerFocus === undefined) {
+            panels.value = [];
+            return;
+        }
+        panels.value = r.query.innerFocus?.includes(props.routeTo) ? [0] : [];
+    },
+    { immediate: true }
+);
 </script>
 
 <style scoped>
@@ -47,4 +67,3 @@ function clickedCard(id: string) {
     padding-top: 8px;
 }
 </style>
-./ReferenceCardLinkComponent.vue
