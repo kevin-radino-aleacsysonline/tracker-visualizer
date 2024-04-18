@@ -12,7 +12,6 @@ import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { IIdentifiable } from '../types/identifiable';
 import Panels from '../components/Panels.vue';
-import { ALL } from '../constants';
 import { getEnvironments, getProjects, getUpdates } from '../controllers/dataController';
 import { DataType } from '../types/dataTypes';
 import _ from 'lodash';
@@ -21,53 +20,13 @@ import { QueryInfoType } from '../types/queryInfoType';
 var isLoading = ref(true);
 var fetchedData: Map<string, IIdentifiable> = new Map<string, IIdentifiable>();
 var requestedData: Ref<IIdentifiable[]> = ref([]);
-
 const route = useRoute();
-
 const props = defineProps({
     dataType: {
         type: String,
         required: true,
     },
-    id: {
-        type: String,
-        required: false,
-    },
-    ids: {
-        type: Array,
-        required: false,
-    },
 });
-
-function TryAndAddToRequestData(key: string): void {
-    if (fetchedData.has(key)) {
-        requestedData.value.push(fetchedData.get(key)!);
-    }
-}
-
-function AddSingleToRequests(id: string): void {
-    if (id === ALL) {
-        fetchedData.forEach((value) => {
-            requestedData.value.push(value);
-        });
-    } else {
-        TryAndAddToRequestData(id);
-    }
-}
-
-function AddMultipleToRequests(ids: string[]): void {
-    if (ids.includes(ALL)) {
-        fetchedData.forEach((value) => {
-            if (!ids.includes(value.id)) {
-                requestedData.value.push(value);
-            }
-        });
-    } else {
-        for (let i = 0; i < ids.length; i++) {
-            TryAndAddToRequestData(ids[i]);
-        }
-    }
-}
 
 async function SetFetchFunction(dataType: string): Promise<void> {
     if (dataType === DataType.Environments) {
@@ -99,12 +58,9 @@ async function FetchData(refreshData = true): Promise<void> {
         await SetFetchFunction(props.dataType);
     }
     requestedData.value = [];
-    if (props.ids) {
-        AddMultipleToRequests(props.ids as string[]);
-    }
-    if (props.id) {
-        AddSingleToRequests(props.id as string);
-    }
+    fetchedData.forEach((value) => {
+        requestedData.value.push(value);
+    });
     if (route.query && route.query[QueryInfoType.type]) {
         FilterData(QueryInfoType.type, route.query.type as string);
     }

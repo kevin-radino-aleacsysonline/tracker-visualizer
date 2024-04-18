@@ -1,27 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Environments from '../../components/views/EnvironmentsView.vue';
-import Projects from '../../components/views/ProjectsView.vue';
-import Updates from '../../components/views/UpdatesView.vue';
+import ViewTemplate from '../../components/ViewTemplate.vue';
 
 const routes = [
     {
         path: '/',
-        redirect: '/environments/all',
+        redirect: '/environments',
     },
     {
-        path: '/environments/:id*',
+        path: '/environments',
         name: 'Environments',
-        component: Environments,
+        component: ViewTemplate,
+        props: {
+            dataType: 'environments',
+        },
     },
     {
-        path: '/projects/:id*',
+        path: '/projects',
         name: 'Projects',
-        component: Projects,
+        component: ViewTemplate,
+        props: {
+            dataType: 'projects',
+        },
     },
     {
-        path: '/updates/:id*',
+        path: '/updates',
         name: 'Updates',
-        component: Updates,
+        component: ViewTemplate,
+        props: {
+            dataType: 'updates',
+        },
     },
 ];
 

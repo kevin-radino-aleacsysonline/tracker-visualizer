@@ -14,15 +14,17 @@
                     <v-list-item prepend-icon="mdi-update" color="orange" title="Updates" :to="{ name: 'Updates' }"></v-list-item>
                 </v-list>
             </v-navigation-drawer>
-            <v-main class="d-flex justify-center"><router-view /></v-main>
+            <v-main class="d-flex justify-center"><router-view :key="route.name!" /></v-main>
         </v-layout>
     </v-app>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import ToggleThemeComponent from './components/ToggleThemeComponent.vue';
 var drawer = ref(true);
+const route = useRoute();
 const toggleDrawer = () => {
     drawer.value = !drawer.value;
 };
@@ -30,6 +32,6 @@ const toggleDrawer = () => {
 
 <style scope>
 .dark-background {
-    background-color: #121212; /* Choose a suitable dark color */
+    background-color: #121212;
 }
 </style>
