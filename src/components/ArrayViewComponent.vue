@@ -28,20 +28,20 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { Reference } from '../types/references';
 import { ref, Ref, watch } from 'vue';
 import ValueCardComponent from './ValueCardComponent.vue';
 import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
-import { addToInnerFocus } from '../controllers/urlQuery';
+import { addToInnerFocus, routeAndAddQuery } from '../controllers/urlQuery';
+import { QueryInfoType } from '../types/queryInfoType';
 const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
 
-const router = useRouter();
 const route = useRoute();
 var panels: Ref<number[]> = ref([0]);
 
 function clickedCard(id: string): void {
-    router.push('/' + props.routeTo + '/' + id);
+    routeAndAddQuery(props.routeTo, id, QueryInfoType.id);
 }
 
 function onTitleClick(): void {

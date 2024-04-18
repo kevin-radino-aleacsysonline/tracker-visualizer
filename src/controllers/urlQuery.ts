@@ -17,12 +17,6 @@ export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded,
     }
 }
 
-function removeData(route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
-    const currentQuery = { ...route.query };
-    delete currentQuery[queryType];
-    router.push({ query: currentQuery });
-}
-
 export function addToInnerFocus(data: string, route: RouteLocationNormalizedLoaded): void {
     let currentQuery = route.query[QueryInfoType.innerFocus];
     if (currentQuery === undefined || currentQuery === null) {
@@ -44,6 +38,19 @@ export function addToInnerFocus(data: string, route: RouteLocationNormalizedLoad
             addOrUpdateData(currentQuery, route, QueryInfoType.innerFocus);
         }
     }
+}
+
+export function routeAndAddQuery(routeTo: string, data: any, queryInfoType: QueryInfoType): void {
+    const query = {
+        [queryInfoType]: data,
+    };
+    router.push({ path: '/' + routeTo, query: query });
+}
+
+function removeData(route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
+    const currentQuery = { ...route.query };
+    delete currentQuery[queryType];
+    router.push({ query: currentQuery });
 }
 
 function addOrUpdateData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {

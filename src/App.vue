@@ -8,15 +8,13 @@
             </v-app-bar>
             <v-navigation-drawer v-model="drawer" expand-on-hover rail mobile-breakpoint="md">
                 <v-list>
-                    <!-- <v-divider></v-divider> -->
-                    <!-- <v-list-item prepend-icon="mdi-home-circle" title="Home" link to="/"></v-list-item> -->
                     <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-sprout" color="green" title="Environments" :to="{ name: 'Environments', params: { id: ['all'] } }"></v-list-item>
-                    <v-list-item prepend-icon="mdi-lightbulb-variant" color="primary" title="Projects" :to="{ name: 'Projects', params: { id: ['all'] } }"></v-list-item>
-                    <v-list-item prepend-icon="mdi-update" color="orange" title="Updates" :to="{ name: 'Updates', params: { id: ['all'] } }"></v-list-item>
+                    <v-list-item prepend-icon="mdi-sprout" color="green" title="Environments" :to="{ name: 'Environments' }"></v-list-item>
+                    <v-list-item prepend-icon="mdi-lightbulb-variant" color="primary" title="Projects" :to="{ name: 'Projects' }"></v-list-item>
+                    <v-list-item prepend-icon="mdi-update" color="orange" title="Updates" :to="{ name: 'Updates' }"></v-list-item>
                 </v-list>
             </v-navigation-drawer>
-            <v-main class="d-flex justify-center"><router-view /> </v-main>
+            <v-main class="d-flex justify-center"><router-view /></v-main>
         </v-layout>
     </v-app>
 </template>
