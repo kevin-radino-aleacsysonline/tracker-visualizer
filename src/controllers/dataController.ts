@@ -2,12 +2,13 @@ import { Environment } from '../types/environment';
 import { Project } from '../types/project';
 import { Update } from '../types/update';
 import { wait } from '../utils';
-
-import * as environmentData from '../data/environments.json';
-import * as projectData from '../data/projects.json';
-import * as updateData from '../data/updates.json';
-import { DataType } from '../types/dataTypes';
 import { IIdentifiable } from '../types/identifiable';
+import { DataType } from '../types/dataTypes';
+import { QueryInfoType } from '../types/queryInfoType';
+import * as updateData from '../data/updates.json';
+import * as projectData from '../data/projects.json';
+import * as environmentData from '../data/environments.json';
+import _ from 'lodash';
 
 async function fetchData<T extends IIdentifiable>(dataType: DataType): Promise<Map<string, T>> {
     const jsonData = getDataByType(dataType) as object[];
@@ -20,6 +21,37 @@ async function fetchData<T extends IIdentifiable>(dataType: DataType): Promise<M
         }
     }
     return dataArray;
+}
+
+export function filterData(toFilter: IIdentifiable[], queryTypes: QueryInfoType[], filterValues: string[]): IIdentifiable[] {
+    if (queryTypes.length !== filterValues.length) {
+        console.error('did not pass correct amount of filters, please verify');
+        return toFilter;
+    }
+
+    if (queryTypes.length === 0) {
+        return toFilter;
+    }
+
+    let result = _.cloneDeep(toFilter);
+    queryTypes.forEach((queryType, index) => {
+        result = filter(result, queryType, filterValues[index]);
+    });
+
+    return result;
+}
+
+function filter(toFilter: IIdentifiable[], queryType: QueryInfoType, filter: string): IIdentifiable[] {
+    var filteredData: IIdentifiable[] = [];
+    toFilter.forEach((value) => {
+        if (queryType in value) {
+            const objValue = (value as any)[queryType];
+            if (filter === objValue) {
+                filteredData.push(value);
+            }
+        }
+    });
+    return filteredData;
 }
 
 function getDataByType(dataType: DataType): object[] {

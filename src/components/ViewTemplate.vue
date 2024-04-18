@@ -12,7 +12,7 @@ import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { IIdentifiable } from '../types/identifiable';
 import Panels from '../components/Panels.vue';
-import { getEnvironments, getProjects, getUpdates } from '../controllers/dataController';
+import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers/dataController';
 import { DataType } from '../types/dataTypes';
 import _ from 'lodash';
 import { QueryInfoType } from '../types/queryInfoType';
@@ -28,7 +28,15 @@ const props = defineProps({
     },
 });
 
-async function SetFetchFunction(dataType: string): Promise<void> {
+onMounted(async () => {
+    await fetchData();
+});
+
+watch(route, async () => {
+    filterFetchedData();
+});
+
+async function setFetchFunction(dataType: string): Promise<void> {
     if (dataType === DataType.Environments) {
         fetchedData = await getEnvironments();
     } else if (dataType === DataType.Projects) {
@@ -38,44 +46,32 @@ async function SetFetchFunction(dataType: string): Promise<void> {
     }
 }
 
-function FilterData(filter: string, filterValue: string): void {
-    var filteredData: IIdentifiable[] = [];
-    fetchedData.forEach((value) => {
-        if (filter in value) {
-            const objValue = (value as any)[filter];
-            if (filterValue === objValue) {
-                filteredData.push(value);
-            }
-        }
-    });
-    if (filteredData.length > 0) {
-        requestedData.value = filteredData;
-    }
-}
-
-async function FetchData(refreshData = true): Promise<void> {
+async function fetchData(refreshData = true): Promise<void> {
     if (refreshData) {
-        await SetFetchFunction(props.dataType);
+        await setFetchFunction(props.dataType);
     }
     requestedData.value = [];
     fetchedData.forEach((value) => {
         requestedData.value.push(value);
     });
-    if (route.query && route.query[QueryInfoType.type]) {
-        FilterData(QueryInfoType.type, route.query.type as string);
-    }
+    filterFetchedData();
     isLoading.value = false;
 }
 
-onMounted(async () => {
-    await FetchData();
-});
+function filterFetchedData(): void {
+    const queries: QueryInfoType[] = [];
+    const filters: string[] = [];
 
-watch(route, async () => {
-    if (route.query[QueryInfoType.type]) {
-        FilterData(QueryInfoType.type, route.query.type as string);
-    } else {
-        await FetchData(false);
+    if (route.query) {
+        if (route.query[QueryInfoType.type]) {
+            queries.push(QueryInfoType.type);
+            filters.push(route.query[QueryInfoType.type] as string);
+        }
+        if (route.query[QueryInfoType.id]) {
+            queries.push(QueryInfoType.id);
+            filters.push(route.query[QueryInfoType.id] as string);
+        }
     }
-});
+    requestedData.value = filterData([...fetchedData.values()], queries, filters);
+}
 </script>
