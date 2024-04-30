@@ -33,4 +33,3 @@ function navigateTo(url: string): void {
     right: -8px;
 }
 </style>
-../constants

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import ViewTemplate from '../../components/ViewTemplate.vue';
+import FocusView from '../../components/FocusView.vue';
 
 const routes = [
     {
@@ -29,6 +30,11 @@ const routes = [
         props: {
             dataType: 'updates',
         },
+    },
+    {
+        path: '/focus',
+        name: 'Focus',
+        component: FocusView,
     },
 ];
 
