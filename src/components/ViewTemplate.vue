@@ -1,6 +1,6 @@
 <template>
     <v-container v-if="!isLoading">
-        <panels-component :requested-objects="requestedData" :dataTypeString="dataType"></panels-component>
+        <panels-component :requested-objects="requestedData" :dataType></panels-component>
     </v-container>
     <v-container v-else class="text-center">
         <v-label>Loading...</v-label>
@@ -8,14 +8,14 @@
 </template>
 
 <script setup lang="ts">
+import { QueryInfoType } from '../types/queryInfoType';
+import { IIdentifiable } from '../types/identifiable';
 import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { IIdentifiable } from '../types/identifiable';
-import PanelsComponent from '../components/PanelsComponent.vue';
 import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers/dataController';
 import { DataType } from '../types/dataTypes';
+import PanelsComponent from '../components/PanelsComponent.vue';
 import _ from 'lodash';
-import { QueryInfoType } from '../types/queryInfoType';
 
 var isLoading = ref(true);
 var fetchedData: Map<string, IIdentifiable> = new Map<string, IIdentifiable>();

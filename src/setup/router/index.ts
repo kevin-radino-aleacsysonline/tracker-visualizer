@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import ViewTemplate from '../../components/ViewTemplate.vue';
 import FocusView from '../../components/FocusView.vue';
+import { DataType } from '../../types/dataTypes';
 
 const routes = [
     {
@@ -12,7 +13,7 @@ const routes = [
         name: 'Environments',
         component: ViewTemplate,
         props: {
-            dataType: 'environments',
+            dataType: DataType.Environments,
         },
     },
     {
@@ -20,7 +21,7 @@ const routes = [
         name: 'Projects',
         component: ViewTemplate,
         props: {
-            dataType: 'projects',
+            dataType: DataType.Projects,
         },
     },
     {
@@ -28,7 +29,7 @@ const routes = [
         name: 'Updates',
         component: ViewTemplate,
         props: {
-            dataType: 'updates',
+            dataType: DataType.Updates,
         },
     },
     {

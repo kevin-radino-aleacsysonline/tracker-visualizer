@@ -7,10 +7,10 @@
                         {{ title }}
                     </v-col>
                     <v-col cols="3">
-                        <chip-type-component :on-click-callback="onChipCallbackWithType">{{ item.type }}</chip-type-component>
+                        <chip-type-component :on-click-callback="onChipCallbackWithType" :color="'primary'">{{ item.type }}</chip-type-component>
                     </v-col>
                     <v-col>
-                        <chip-type-component :on-click-callback="onChipCallbackWithId">{{ item.id }}</chip-type-component>
+                        <chip-type-component :on-click-callback="onChipCallbackWithId" :color="'orange'">{{ item.id }}</chip-type-component>
                     </v-col>
                 </v-row>
             </v-col>

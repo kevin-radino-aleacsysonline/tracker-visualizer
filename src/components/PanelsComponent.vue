@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panels v-if="dataTypeString !== DataType.Updates" v-model="panels">
+    <v-expansion-panels v-if="dataType !== DataType.Updates" v-model="panels">
         <panel-environment-project-component :objects="castToEnvironmentOrProject()"></panel-environment-project-component>
     </v-expansion-panels>
 
@@ -14,37 +14,23 @@ import { Project } from '../types/project';
 import { Update } from '../types/update';
 import { DataType } from '../types/dataTypes';
 
-import { onMounted, Ref, ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { capitalize } from 'lodash';
 import PanelEnvironmentProjectComponent from '../components/PanelEnvironmentProjectComponent.vue';
 import PanelUpdateComponent from './PanelUpdateComponent.vue';
+import { IIdentifiable } from '../types/identifiable';
 
-const props = defineProps({
-    requestedObjects: {
-        type: Object,
-        required: true,
-    },
-    dataTypeString: {
-        type: String,
-        required: true,
-    },
-});
+const props = defineProps<{ requestedObjects: IIdentifiable[]; dataType: DataType }>();
 const route = useRoute();
 var panels: Ref<number[]> = ref([]);
-var dataType = ref(DataType.Environments);
 
 function castToEnvironmentOrProject(): Project[] | Environment[] {
-    return props.dataTypeString === DataType.Projects ? (props.requestedObjects as Project[]) : (props.requestedObjects as Environment[]);
+    return props.dataType === DataType.Projects ? (props.requestedObjects as Project[]) : (props.requestedObjects as Environment[]);
 }
 
 function castToUpdate(): Update[] {
     return props.requestedObjects as Update[];
 }
-
-onMounted(() => {
-    dataType.value = DataType[capitalize(props.dataTypeString) as keyof typeof DataType];
-});
 
 watch(
     route,

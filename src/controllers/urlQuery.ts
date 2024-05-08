@@ -1,6 +1,8 @@
-import { RouteLocationNormalizedLoaded } from 'vue-router';
 import router from '../setup/router';
+
+import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { QueryInfoType } from '../types/queryInfoType';
+import { eventBus } from '../events/eventBus';
 
 export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     let castedData = undefined;
@@ -11,7 +13,7 @@ export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded,
         castedData = `${route.query[queryType]}`;
     }
     if (data === castedData) {
-        removeData(route, queryType);
+        removeData(route, data, queryType);
     } else {
         addOrUpdateData(data, route, queryType);
     }
@@ -29,7 +31,7 @@ export function addToInnerFocus(data: string, route: RouteLocationNormalizedLoad
                 currentQuery = currentQuery.slice(1);
             }
             if (currentQuery.length === 0) {
-                removeData(route, QueryInfoType.innerFocus);
+                removeData(route, data, QueryInfoType.innerFocus);
             } else {
                 addOrUpdateData(currentQuery, route, QueryInfoType.innerFocus);
             }
@@ -47,9 +49,10 @@ export function routeAndAddQuery(routeTo: string, data: any, queryInfoType: Quer
     router.push({ path: '/' + routeTo, query: query });
 }
 
-function removeData(route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
+function removeData(route: RouteLocationNormalizedLoaded, data: any, queryType: QueryInfoType): void {
     const currentQuery = { ...route.query };
     delete currentQuery[queryType];
+    eventBus.emit('onQueryChange', { type: queryType, data, remove: true });
     router.push({ query: currentQuery });
 }
 
@@ -57,10 +60,15 @@ function addOrUpdateData(data: any, route: RouteLocationNormalizedLoaded, queryT
     const query = {
         [queryType]: data,
     };
+    eventBus.emit('onQueryChange', { type: queryType, data });
     updateRouteQuery(query, route);
 }
 
 function updateRouteQuery(query: any, route: RouteLocationNormalizedLoaded): void {
     const updateQuery = { ...route.query, ...query };
     router.push({ query: updateQuery });
+}
+
+export function clearRouteQuery(): void {
+    router.push({ query: {} });
 }

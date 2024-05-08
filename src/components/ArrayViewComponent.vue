@@ -31,10 +31,10 @@
 import { useRoute } from 'vue-router';
 import { Reference } from '../types/references';
 import { ref, Ref, watch } from 'vue';
-import ValueCardComponent from './ValueCardComponent.vue';
-import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
 import { addToInnerFocus, routeAndAddQuery } from '../controllers/urlQuery';
 import { QueryInfoType } from '../types/queryInfoType';
+import ValueCardComponent from './ValueCardComponent.vue';
+import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
 const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
 
 const route = useRoute();
