@@ -1,6 +1,6 @@
-import { createApp } from 'vue';
 import App from './App.vue';
 import vuetify from './setup/vuetify';
+import { createApp } from 'vue';
 import router from './setup/router';
 
 import './scss/normalize.css';

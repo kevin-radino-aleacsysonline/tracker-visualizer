@@ -1,10 +1,11 @@
 <template>
-    <v-card variant="outlined" color="grey" class="hover-card" :class="{ 'is-expanded': expanded }">
+    <v-card v-if="!isLoading" variant="outlined" color="grey" class="hover-card" :class="{ 'is-expanded': expanded }">
         <v-card-text class="d-flex align-center">
             <span class="filter-text">Filters</span>
             <span v-if="expanded" class="d-flex align-center card-content">
                 <div class="centered-div">
-                    <dropdown-component :items="['one', 'two', 'three', 'four']"></dropdown-component>
+                    <dropdown-component v-if="typeItems" :label="'Type'" :color="'blue'" :items="typeItems"></dropdown-component>
+                    <dropdown-component :label="'Id'" :color="'orange'" :items="idItems"></dropdown-component>
                 </div>
                 <v-btn variant="tonal" color="blue" class="submit-btn">Submit</v-btn>
             </span>
@@ -15,24 +16,60 @@
             </v-icon>
         </v-btn>
     </v-card>
+    <v-label v-else>Loading...</v-label>
 </template>
 
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue';
+import { ref, onUnmounted, onMounted, Ref, watch } from 'vue';
 import { eventBus } from '../events/eventBus';
-import { OnQueryChangedArgs } from '../events/eventTypes';
+import { OnQueryChangedArgs, OnViewLoadingArgs, OnViewUpdateArgs } from '../events/eventTypes';
 import DropdownComponent from './DropdownComponent.vue';
+import { UpdateType } from '../types/updateTypes';
+import { EnvironmentType } from '../types/environmentTypes';
+import { ProjectType } from '../types/projectTypes';
+import { getDataTypeRoute } from '../controllers/urlQuery';
+import { getTypesByDataType } from '../controllers/helpers';
+import { useRoute } from 'vue-router';
 
 const expanded = ref(true);
+const route = useRoute();
 
+var isLoading = ref(false);
+var typeItems: Ref<UpdateType[] | EnvironmentType[] | ProjectType[]> = ref([]);
+var idItems: Ref<string[]> = ref([]);
 eventBus.on('onQueryChange', handleOnQueryChange);
+eventBus.on('onViewUpdate', handleOnViewUpdate);
+eventBus.on('onViewLoading', handleOnViewLoading);
 
 onUnmounted(() => {
     eventBus.off('onQueryChange', handleOnQueryChange);
+    eventBus.off('onViewUpdate', handleOnViewUpdate);
+    eventBus.off('onViewLoading', handleOnViewLoading);
 });
 
-function handleOnQueryChange(args: OnQueryChangedArgs): void {
-    args;
+onMounted(() => {
+    updateFilters();
+});
+
+watch(route, () => {
+    updateFilters();
+});
+
+function updateFilters(): void {
+    const dataType = getDataTypeRoute(route);
+    typeItems.value?.slice(0);
+    typeItems.value = getTypesByDataType(dataType);
+}
+
+function handleOnQueryChange(_: OnQueryChangedArgs): void {}
+
+function handleOnViewUpdate(args: OnViewUpdateArgs): void {
+    isLoading.value = false;
+    idItems.value = args.list;
+}
+
+function handleOnViewLoading(_: OnViewLoadingArgs): void {
+    isLoading.value = true;
 }
 </script>
 
@@ -59,7 +96,7 @@ function handleOnQueryChange(args: OnQueryChangedArgs): void {
     align-items: center;
 }
 .hover-card.is-expanded {
-    width: 50%;
+    width: 70%;
     height: 55px;
     transition: all 0.3s ease;
 }

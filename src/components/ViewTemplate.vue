@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { QueryInfoType } from '../types/queryInfoType';
 import { IIdentifiable } from '../types/identifiable';
+import { eventBus } from '../events/eventBus';
 import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers/dataController';
@@ -24,7 +25,13 @@ const route = useRoute();
 const props = defineProps<{ dataType: DataType }>();
 
 onMounted(async () => {
+    eventBus.emit('onViewLoading', {});
     await fetchData();
+    const idList: string[] = [];
+    fetchedData.forEach((value) => {
+        idList.push(value.id);
+    });
+    eventBus.emit('onViewUpdate', { list: idList });
 });
 
 watch(route, async () => {

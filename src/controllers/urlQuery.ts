@@ -3,6 +3,7 @@ import router from '../setup/router';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { QueryInfoType } from '../types/queryInfoType';
 import { eventBus } from '../events/eventBus';
+import { DataType } from '../types/dataTypes';
 
 export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     let castedData = undefined;
@@ -71,4 +72,9 @@ function updateRouteQuery(query: any, route: RouteLocationNormalizedLoaded): voi
 
 export function clearRouteQuery(): void {
     router.push({ query: {} });
+}
+
+export function getDataTypeRoute(route: RouteLocationNormalizedLoaded): DataType {
+    var dataType: DataType = DataType[route.name as keyof typeof DataType];
+    return dataType;
 }

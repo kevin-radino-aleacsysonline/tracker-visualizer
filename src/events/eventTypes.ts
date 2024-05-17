@@ -7,3 +7,9 @@ export interface OnQueryChangedArgs {
 }
 
 export interface OnQueryResetArgs {}
+
+export interface OnViewUpdateArgs {
+    list: string[];
+}
+
+export interface OnViewLoadingArgs {}
