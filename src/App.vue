@@ -19,10 +19,13 @@
                     <v-list-item prepend-icon="mdi-sprout" color="green" title="Environments" :to="{ name: 'Environments' }" @click="onListItemClicked"></v-list-item>
                     <v-list-item prepend-icon="mdi-lightbulb-variant" color="primary" title="Projects" :to="{ name: 'Projects' }" @click="onListItemClicked"></v-list-item>
                     <v-list-item prepend-icon="mdi-update" color="orange" title="Updates" :to="{ name: 'Updates' }" @click="onListItemClicked"></v-list-item>
+                    <v-divider></v-divider>
+                    <v-list-item prepend-icon="mdi-filter" color="blue" title="Filter"></v-list-item>
+                    <filter-chip-list-component></filter-chip-list-component>
                 </v-list>
             </v-navigation-drawer>
             <v-main class="main d-flex flex-column justify-start">
-                <filter-tool-bar :data-type="DataType.Environments"></filter-tool-bar>
+                <!-- <filter-tool-bar></filter-tool-bar> -->
                 <router-view :key="route.name!" />
             </v-main>
         </v-layout>
@@ -35,8 +38,8 @@ import { useRoute } from 'vue-router';
 import { eventBus } from './events/eventBus';
 import FilterExpandComponent from './components/FilterExpandComponent.vue';
 import ToggleThemeComponent from './components/ToggleThemeComponent.vue';
-import FilterToolBar from './components/FilterToolBar.vue';
-import { DataType } from './types/dataTypes';
+import FilterChipListComponent from './components/FilterChipListComponent.vue';
+// import FilterToolBar from './components/FilterToolBar.vue';
 
 var drawer = ref(true);
 const route = useRoute();

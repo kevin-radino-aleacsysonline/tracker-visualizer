@@ -13,17 +13,15 @@
 import _ from 'lodash';
 import { onMounted, onUnmounted, ref, Ref } from 'vue';
 import { eventBus } from '../events/eventBus';
-import { OnQueryChangedArgs, OnQueryResetArgs } from '../events/eventTypes';
+import { OnQueryChangedArgs } from '../events/eventTypes';
 import { QueryInfoType } from '../types/queryInfoType';
 import { useRoute, useRouter } from 'vue-router';
 import { clearRouteQuery } from '../controllers/urlQuery';
 import FilterChipComponent from './FilterChipComponent.vue';
-import { DataType } from '../types/dataTypes';
 
 const visible = ref(true);
 const route = useRoute();
 const router = useRouter();
-defineProps<{ dataType: DataType }>();
 
 const currentFilters: Ref<Map<QueryInfoType, any>> = ref(new Map<QueryInfoType, any>());
 function closeFilterToolBar() {
@@ -31,25 +29,6 @@ function closeFilterToolBar() {
     currentFilters.value.clear();
     clearRouteQuery();
 }
-
-const handleOnQueryChange = (args: OnQueryChangedArgs) => {
-    if (!args.remove) {
-        currentFilters.value.set(args.type, args.data);
-    } else {
-        if (currentFilters.value.has(args.type)) {
-            currentFilters.value.delete(args.type);
-        }
-    }
-    updateToolBar();
-};
-
-const handleOnQueryReset = (_: OnQueryResetArgs) => {
-    visible.value = false;
-    currentFilters.value.clear();
-};
-
-eventBus.on('onQueryChange', handleOnQueryChange);
-eventBus.on('onQueryReset', closeFilterToolBar);
 
 onMounted(async () => {
     await router.isReady();
@@ -65,8 +44,22 @@ onMounted(async () => {
 
 onUnmounted(() => {
     eventBus.off('onQueryChange', handleOnQueryChange);
-    eventBus.off('onQueryReset', handleOnQueryReset);
+    eventBus.off('onQueryReset', closeFilterToolBar);
 });
+
+const handleOnQueryChange = (args: OnQueryChangedArgs) => {
+    if (!args.remove) {
+        currentFilters.value.set(args.type, args.data);
+    } else {
+        if (currentFilters.value.has(args.type)) {
+            currentFilters.value.delete(args.type);
+        }
+    }
+    updateToolBar();
+};
+
+eventBus.on('onQueryChange', handleOnQueryChange);
+eventBus.on('onQueryReset', closeFilterToolBar);
 
 function updateToolBar(): void {
     visible.value = currentFilters.value.size > 0;
