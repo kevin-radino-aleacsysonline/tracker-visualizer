@@ -55,7 +55,6 @@ function closeFilterToolBar() {
     visible.value = false;
     currentFilters.value.clear();
     clearRouteQuery();
-    eventBus.emit('onFiltersClear', {});
 }
 
 function onFiltersClearHandler(): void {

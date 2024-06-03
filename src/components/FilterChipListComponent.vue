@@ -76,7 +76,6 @@ function onRemoveAllFilters(): void {
     visible.value = false;
     hovered.value = false;
     clearRouteQuery();
-    eventBus.emit('onFiltersClear', {});
 }
 </script>
 

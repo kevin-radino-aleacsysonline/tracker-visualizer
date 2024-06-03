@@ -21,10 +21,11 @@ import { ref, watch, Ref, onUnmounted, onMounted } from 'vue';
 import { eventBus } from '../events/eventBus';
 import { OnViewUpdateArgs, OnViewLoadingArgs, OnFilterChangedArgs } from '../events/eventTypes';
 import { getTypesByDataType } from '../controllers/helpers';
-import { getDataTypeRoute } from '../controllers/urlQuery';
+import { addOrRemoveData, getDataTypeRoute } from '../controllers/urlQuery';
 import { useRoute } from 'vue-router';
 import DropdownComponent from './DropdownComponent.vue';
 import { QueryInfoType } from '../types/queryInfoType';
+import _ from 'lodash';
 
 const props = defineProps<{ showDialog: boolean }>();
 const emits = defineEmits<{ (e: 'update:showDialog', value: boolean): void }>();
@@ -71,7 +72,10 @@ function onCancelClick(): void {
 
 function onSubmitClick(): void {
     console.error(idItemsSelected.value, typeItemsSelected.value);
-    onCancelClick();
+    const ids = _.join(idItemsSelected.value, '_');
+    const types = _.join(typeItemsSelected.value, '_');
+    addOrRemoveData(ids, route, QueryInfoType.id);
+    addOrRemoveData(types, route, QueryInfoType.type);
 }
 
 function updateFilters(): void {

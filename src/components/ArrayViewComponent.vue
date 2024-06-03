@@ -31,7 +31,7 @@
 import { useRoute } from 'vue-router';
 import { Reference } from '../types/references';
 import { ref, Ref, watch } from 'vue';
-import { addToInnerFocus, routeAndAddQuery } from '../controllers/urlQuery';
+import { routeAndAddQuery, addOrRemoveData } from '../controllers/urlQuery';
 import { QueryInfoType } from '../types/queryInfoType';
 import ValueCardComponent from './ValueCardComponent.vue';
 import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
@@ -45,7 +45,7 @@ function clickedCard(id: string): void {
 }
 
 function onTitleClick(): void {
-    addToInnerFocus(props.routeTo, route);
+    addOrRemoveData(props.routeTo, route, QueryInfoType.innerFocus);
 }
 
 watch(
