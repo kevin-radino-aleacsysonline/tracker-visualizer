@@ -1,4 +1,4 @@
-import { OnFilterChangedArgs, OnQueryChangedArgs, OnQueryResetArgs, OnViewLoadingArgs, OnViewUpdateArgs } from './eventTypes';
+import { OnFilterChangedArgs, OnFiltersClearArgs, OnQueryChangedArgs, OnQueryResetArgs, OnViewLoadingArgs, OnViewUpdateArgs } from './eventTypes';
 
 export interface EventMap {
     onQueryChange: OnQueryChangedArgs;
@@ -6,6 +6,7 @@ export interface EventMap {
     onViewUpdate: OnViewUpdateArgs;
     onViewLoading: OnViewLoadingArgs;
     onFilterChanged: OnFilterChangedArgs;
+    onFiltersClear: OnFiltersClearArgs;
 }
 
 type EventHandler<T = any> = (payload: T) => void;

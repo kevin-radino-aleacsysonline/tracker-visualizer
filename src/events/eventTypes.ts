@@ -7,6 +7,7 @@ export interface OnQueryChangedArgs {
 }
 
 export interface OnQueryResetArgs {}
+export interface OnFiltersClearArgs {}
 
 export interface OnViewUpdateArgs {
     list: string[];

@@ -24,11 +24,10 @@ const route = useRoute();
 const router = useRouter();
 
 const currentFilters: Ref<Map<QueryInfoType, any>> = ref(new Map<QueryInfoType, any>());
-function closeFilterToolBar() {
-    visible.value = false;
-    currentFilters.value.clear();
-    clearRouteQuery();
-}
+
+eventBus.on('onQueryChange', onQueryChangeHandler);
+eventBus.on('onQueryReset', closeFilterToolBar);
+eventBus.on('onFiltersClear', onFiltersClearHandler);
 
 onMounted(async () => {
     await router.isReady();
@@ -43,11 +42,30 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-    eventBus.off('onQueryChange', handleOnQueryChange);
+    eventBus.off('onQueryChange', onQueryChangeHandler);
     eventBus.off('onQueryReset', closeFilterToolBar);
+    eventBus.off('onFiltersClear', onFiltersClearHandler);
 });
 
-const handleOnQueryChange = (args: OnQueryChangedArgs) => {
+function updateToolBar(): void {
+    visible.value = currentFilters.value.size > 0;
+}
+
+function closeFilterToolBar() {
+    visible.value = false;
+    currentFilters.value.clear();
+    clearRouteQuery();
+    eventBus.emit('onFiltersClear', {});
+}
+
+function onFiltersClearHandler(): void {
+    if (currentFilters.value.size !== 0 || visible.value) {
+        currentFilters.value.clear();
+        visible.value = false;
+    }
+}
+
+function onQueryChangeHandler(args: OnQueryChangedArgs): void {
     if (!args.remove) {
         currentFilters.value.set(args.type, args.data);
     } else {
@@ -56,12 +74,5 @@ const handleOnQueryChange = (args: OnQueryChangedArgs) => {
         }
     }
     updateToolBar();
-};
-
-eventBus.on('onQueryChange', handleOnQueryChange);
-eventBus.on('onQueryReset', closeFilterToolBar);
-
-function updateToolBar(): void {
-    visible.value = currentFilters.value.size > 0;
 }
 </script>
