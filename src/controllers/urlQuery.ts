@@ -6,6 +6,17 @@ import { eventBus } from '../events/eventBus';
 import { DataType } from '../types/dataTypes';
 import _ from 'lodash';
 
+export function setMultipleQueries(dataArr: { data: any; queryType: QueryInfoType }[]): void {
+    let query = {};
+    dataArr.forEach((element) => {
+        query = {
+            ...query,
+            [element.queryType]: element.data,
+        };
+    });
+    overwriteAllQueries(query);
+}
+
 export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     const castedData = `${data}`;
     let currentData = route.query[queryType]?.toString().split('_');
@@ -21,28 +32,34 @@ export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded,
             // remove from existing data
             currentData = _.without(currentData, castedData);
         }
-        const newData = _.join(currentData, '_');
-        if (newData.length === 0) {
+        const newArr = _.join(currentData, '_');
+        if (newArr.length === 0) {
             removeQueryFilter(route, queryType);
         } else {
-            setQueryFilter(newData, route, queryType);
+            setQueryFilter(newArr, route, queryType);
         }
     }
-}
-
-export function overwriteData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
-    setQueryFilter(data, route, queryType);
 }
 
 function setQueryFilter(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     const newQuery = {
         ...route.query,
-        ...{
-            [queryType]: data,
-        },
+        [queryType]: data,
     };
     router.push({ query: newQuery });
     eventBus.emit('onQueryChange', { type: queryType, data });
+}
+
+function overwriteAllQueries(query: any): void {
+    router.push({ query });
+    for (const key in query) {
+        const type: QueryInfoType = key as QueryInfoType;
+        if (type === undefined) {
+            console.error('unknown type conversion', key);
+        } else {
+            eventBus.emit('onQueryChange', { type, data: query[key] });
+        }
+    }
 }
 
 function removeQueryFilter(route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {

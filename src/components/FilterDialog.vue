@@ -21,7 +21,7 @@ import { ref, watch, Ref, onUnmounted, onMounted } from 'vue';
 import { eventBus } from '../events/eventBus';
 import { OnViewUpdateArgs, OnViewLoadingArgs, OnFilterChangedArgs } from '../events/eventTypes';
 import { getTypesByDataType } from '../controllers/helpers';
-import { addOrRemoveData, getDataTypeRoute } from '../controllers/urlQuery';
+import { setMultipleQueries, getDataTypeRoute } from '../controllers/urlQuery';
 import { useRoute } from 'vue-router';
 import DropdownComponent from './DropdownComponent.vue';
 import { QueryInfoType } from '../types/queryInfoType';
@@ -71,11 +71,17 @@ function onCancelClick(): void {
 }
 
 function onSubmitClick(): void {
-    console.error(idItemsSelected.value, typeItemsSelected.value);
     const ids = _.join(idItemsSelected.value, '_');
     const types = _.join(typeItemsSelected.value, '_');
-    addOrRemoveData(ids, route, QueryInfoType.id);
-    addOrRemoveData(types, route, QueryInfoType.type);
+    const dataArr: { data: any; queryType: QueryInfoType }[] = [];
+    if (ids.length > 0) {
+        dataArr.push({ data: ids, queryType: QueryInfoType.id });
+    }
+    if (types.length > 0) {
+        dataArr.push({ data: types, queryType: QueryInfoType.type });
+    }
+    setMultipleQueries(dataArr);
+    onCancelClick();
 }
 
 function updateFilters(): void {

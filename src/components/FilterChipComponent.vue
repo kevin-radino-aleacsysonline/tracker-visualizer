@@ -1,20 +1,10 @@
 <template>
-    <template v-if="type === QueryInfoType.innerFocus">
-        <v-tooltip v-for="value in data.split('_')" top>
-            <template v-slot:activator="{ props }">
-                <v-chip class="chip-padding" :prepend-icon="queryTypeIconMap[type]" :color="queryTypeColorMap[type]" v-bind="props" @click="handleCloseInnerFocus(value)">{{ value }}</v-chip>
-            </template>
-            <span>{{ value }}</span>
-        </v-tooltip>
-    </template>
-    <template v-else>
-        <v-tooltip top>
-            <template v-slot:activator="{ props }">
-                <v-chip class="chip-padding" :prepend-icon="queryTypeIconMap[type]" :color="queryTypeColorMap[type]" v-bind="props" @click="handleClose(type, data)">{{ data }}</v-chip>
-            </template>
-            <span>{{ type }}</span>
-        </v-tooltip>
-    </template>
+    <v-tooltip v-for="value in data.split('_')" top>
+        <template v-slot:activator="{ props }">
+            <v-chip class="chip-padding" :prepend-icon="queryTypeIconMap[type]" :color="queryTypeColorMap[type]" v-bind="props" @click="handleClose(value, type)">{{ value }}</v-chip>
+        </template>
+        <span>{{ value }}</span>
+    </v-tooltip>
 </template>
 
 <script setup lang="ts">
@@ -39,20 +29,16 @@ const queryTypeColorMap: Record<QueryInfoType, string> = {
     [QueryInfoType.type]: 'primary',
 };
 
-function handleClose(type: QueryInfoType, data: any): void {
-    addOrRemoveData(data, route, type);
-}
-
-function handleCloseInnerFocus(data: string): void {
+function handleClose(data: string, type: QueryInfoType): void {
     const dataArr: string[] = props.data.split('_');
     if (dataArr.includes(data)) {
         _.remove(dataArr, (element) => element === data);
     }
     if (dataArr.length > 0) {
         const dataStr = dataArr.join('_');
-        addOrRemoveData(dataStr, route, QueryInfoType.innerFocus);
+        addOrRemoveData(dataStr, route, type);
     } else {
-        addOrRemoveData(props.data, route, QueryInfoType.innerFocus);
+        addOrRemoveData(props.data, route, type);
     }
 }
 </script>

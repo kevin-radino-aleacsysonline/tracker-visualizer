@@ -12,7 +12,7 @@ import { Project } from '../types/project';
 import { QueryInfoType } from '../types/queryInfoType';
 
 import { useRoute } from 'vue-router';
-import { overwriteData } from '../controllers/urlQuery';
+import { addOrRemoveData } from '../controllers/urlQuery';
 
 import TableComponent from '../components/TableComponent.vue';
 import PanelTitleComponent from './PanelTitleComponent.vue';
@@ -22,7 +22,7 @@ const props = defineProps<{ item: Update | Project | Environment; index: number;
 const route = useRoute();
 
 function onTitleClick(index: number): void {
-    overwriteData(index.toString(), route, QueryInfoType.focus);
+    addOrRemoveData(index.toString(), route, QueryInfoType.focus);
 }
 
 function getTitle(): string {

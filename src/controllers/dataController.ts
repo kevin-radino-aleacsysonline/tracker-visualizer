@@ -33,9 +33,9 @@ export function filterData(toFilter: IIdentifiable[], queryTypes: QueryInfoType[
         return toFilter;
     }
 
-    let result = _.cloneDeep(toFilter);
+    let result: IIdentifiable[] = [];
     queryTypes.forEach((queryType, index) => {
-        result = filter(result, queryType, filterValues[index]);
+        result = _.union(filter(_.cloneDeep(toFilter), queryType, filterValues[index]), result);
     });
 
     return result;
@@ -46,7 +46,7 @@ function filter(toFilter: IIdentifiable[], queryType: QueryInfoType, filter: str
     toFilter.forEach((value) => {
         if (queryType in value) {
             const objValue = (value as any)[queryType];
-            if (filter === objValue) {
+            if (filter.includes(objValue)) {
                 filteredData.push(value);
             }
         }
