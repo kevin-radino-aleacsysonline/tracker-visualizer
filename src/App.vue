@@ -2,16 +2,9 @@
     <v-app class="dark-background">
         <v-layout>
             <v-app-bar class="app-bar">
-                <div class="left-display">
-                    <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="toggleDrawer"></v-app-bar-nav-icon>
-                    <v-app-bar-title>Update Tracker</v-app-bar-title>
-                </div>
-                <div class="center-display">
-                    <filter-expand-component></filter-expand-component>
-                </div>
-                <div class="right-display">
-                    <toggle-theme-component></toggle-theme-component>
-                </div>
+                <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="toggleDrawer"></v-app-bar-nav-icon>
+                <v-app-bar-title>Update Tracker</v-app-bar-title>
+                <toggle-theme-component></toggle-theme-component>
             </v-app-bar>
             <v-navigation-drawer v-model="drawer" expand-on-hover rail mobile-breakpoint="md">
                 <v-list>
@@ -38,7 +31,6 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { eventBus } from './events/eventBus';
 import ToggleThemeComponent from './components/ToggleThemeComponent.vue';
-import FilterExpandComponent from './components/FilterExpandComponent.vue';
 import FilterChipListComponent from './components/FilterChipListComponent.vue';
 import FilterDialog from './components/FilterDialog.vue';
 import FilterToolBar from './components/FilterToolBar.vue';
