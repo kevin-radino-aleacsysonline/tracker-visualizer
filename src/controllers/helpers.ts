@@ -3,7 +3,7 @@ import { EnvironmentType } from '../types/environmentTypes';
 import { ProjectType } from '../types/projectTypes';
 import { UpdateType } from '../types/updateTypes';
 
-export function getTypesByDataType(dataType: DataType): UpdateType[] | EnvironmentType[] | ProjectType[] {
+export function getTypesByDataType(dataType: DataType): string[] {
     switch (dataType) {
         case DataType.Environments: {
             return Object.values(EnvironmentType);

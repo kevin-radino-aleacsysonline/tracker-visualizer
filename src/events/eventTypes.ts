@@ -13,3 +13,8 @@ export interface OnViewUpdateArgs {
 }
 
 export interface OnViewLoadingArgs {}
+
+export interface OnFilterChangedArgs {
+    type: QueryInfoType;
+    data: string[];
+}

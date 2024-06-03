@@ -4,8 +4,8 @@
             <span class="filter-text">Filters</span>
             <span v-if="expanded" class="d-flex align-center card-content">
                 <div class="centered-div">
-                    <dropdown-component v-if="typeItems" :label="'Type'" :color="'blue'" :items="typeItems"></dropdown-component>
-                    <dropdown-component :label="'Id'" :color="'orange'" :items="idItems"></dropdown-component>
+                    <dropdown-component v-if="typeItems" :label="'Type'" :color="'blue'" :items="typeItems" :query-info="QueryInfoType.type"></dropdown-component>
+                    <dropdown-component :label="'Id'" :color="'orange'" :items="idItems" :query-info="QueryInfoType.id"></dropdown-component>
                 </div>
                 <v-btn variant="tonal" color="blue" class="submit-btn">Submit</v-btn>
             </span>
@@ -23,19 +23,17 @@
 import { ref, onUnmounted, onMounted, Ref, watch } from 'vue';
 import { eventBus } from '../events/eventBus';
 import { OnQueryChangedArgs, OnViewLoadingArgs, OnViewUpdateArgs } from '../events/eventTypes';
-import DropdownComponent from './DropdownComponent.vue';
-import { UpdateType } from '../types/updateTypes';
-import { EnvironmentType } from '../types/environmentTypes';
-import { ProjectType } from '../types/projectTypes';
 import { getDataTypeRoute } from '../controllers/urlQuery';
 import { getTypesByDataType } from '../controllers/helpers';
 import { useRoute } from 'vue-router';
+import DropdownComponent from './DropdownComponent.vue';
+import { QueryInfoType } from '../types/queryInfoType';
 
 const expanded = ref(true);
 const route = useRoute();
 
 var isLoading = ref(false);
-var typeItems: Ref<UpdateType[] | EnvironmentType[] | ProjectType[]> = ref([]);
+var typeItems: Ref<string[]> = ref([]);
 var idItems: Ref<string[]> = ref([]);
 eventBus.on('onQueryChange', handleOnQueryChange);
 eventBus.on('onViewUpdate', handleOnViewUpdate);
