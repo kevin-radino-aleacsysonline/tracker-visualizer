@@ -14,9 +14,9 @@
 </template>
 
 <script setup lang="ts">
+import { InfoType } from '../types';
+import { TableRow } from '../components';
 import { HIDDEN_INFO_ARR } from '../constants';
-import { InfoType } from '../types/infoTypes';
-import TableRow from './TableRow.vue';
 
 defineProps<{ item: object }>();
 </script>
@@ -27,4 +27,3 @@ table {
     border-collapse: collapse;
 }
 </style>
-../constants

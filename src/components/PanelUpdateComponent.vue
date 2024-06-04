@@ -10,14 +10,12 @@
 </template>
 
 <script setup lang="ts">
-import { Update } from '../types/update';
-
 import { useRoute } from 'vue-router';
-import { formatDate } from '../controllers/dateFormatter';
-import { getDataTypeByRouteName } from '../types/dataTypes';
-
-import PanelObjectComponent from './PanelObjectComponent.vue';
+import { Update, getDataTypeByRouteName } from '../types';
+import { formatDate } from '../controllers';
+import { PanelObjectComponent } from '../components';
 
 defineProps<{ objects: Update[] }>();
+
 const route = useRoute();
 </script>

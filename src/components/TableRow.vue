@@ -1,7 +1,7 @@
 <template>
     <template v-if="!HIDDEN_ID_IN_TABLE_ARR.includes(type)">
         <tr>
-            <td class="fixed-width">{{ capitalize(type!) }}</td>
+            <td class="fixed-width">{{ _.capitalize(type!) }}</td>
             <td>
                 <template v-if="value">
                     {{ value }}
@@ -24,7 +24,7 @@
                     <div class="icon">
                         <v-icon color="primary"> mdi-numeric-{{ valueArray!.length <= 9 ? valueArray!.length : '9-plus' }}-box-multiple-outline</v-icon>
                     </div>
-                    {{ capitalize(type) }}
+                    {{ _.capitalize(type) }}
                 </array-view-component>
             </td>
         </tr>
@@ -32,11 +32,10 @@
 </template>
 
 <script setup lang="ts">
-import { capitalize } from 'lodash';
+import _ from 'lodash';
 import { InfoType } from '../types/infoTypes';
+import { ArrayViewComponent, CustomObjectComponent } from '../components';
 import { HIDDEN_ID_IN_TABLE_ARR } from '../constants';
-import ArrayViewComponent from './ArrayViewComponent.vue';
-import CustomObjectComponent from './CustomObjectComponent.vue';
 
 defineProps<{ type: InfoType; value?: string; valueArray?: []; valueObject?: object }>();
 </script>

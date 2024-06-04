@@ -16,11 +16,10 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { eventBus } from '../events/eventBus';
-import { OnQueryChangedArgs } from '../events/eventTypes';
-import { QueryInfoType } from '../types/queryInfoType';
-import FilterChipComponent from './FilterChipComponent.vue';
-import { clearRouteQuery } from '../controllers/urlQuery';
+import { eventBus, OnQueryChangedArgs } from '../events';
+import { QueryInfoType } from '../types';
+import { clearRouteQuery } from '../controllers';
+import { FilterChipComponent } from '../components';
 
 const currentFilters: Ref<Map<QueryInfoType, any>> = ref(new Map<QueryInfoType, any>());
 

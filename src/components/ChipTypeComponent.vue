@@ -10,9 +10,8 @@
 </template>
 
 <script setup lang="ts">
+import { QueryInfoType, SelectionTypes } from '../types';
 import { COLORS_QUERY, ICONS_QUERY } from '../constants';
-import { QueryInfoType } from '../types/queryInfoType';
-import { SelectionTypes } from '../types/selectionTypes';
 
 defineProps<{ onClickCallback?: () => void; type: QueryInfoType; useIcon?: boolean; props?: Record<string, any> }>();
 </script>

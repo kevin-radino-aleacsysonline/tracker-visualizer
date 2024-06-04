@@ -8,15 +8,13 @@
 </template>
 
 <script setup lang="ts">
-import { QueryInfoType } from '../types/queryInfoType';
-import { IIdentifiable } from '../types/identifiable';
-import { eventBus } from '../events/eventBus';
+import _ from 'lodash';
 import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers/dataController';
-import { DataType } from '../types/dataTypes';
-import PanelsComponent from '../components/PanelsComponent.vue';
-import _ from 'lodash';
+import { DataType, IIdentifiable, QueryInfoType } from '../types';
+import { eventBus } from '../events';
+import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers';
+import { PanelsComponent } from '../components';
 
 var isLoading = ref(true);
 var fetchedData: Map<string, IIdentifiable> = new Map<string, IIdentifiable>();

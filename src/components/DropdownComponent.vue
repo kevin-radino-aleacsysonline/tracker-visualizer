@@ -20,9 +20,8 @@
 
 <script setup lang="ts">
 import { Ref, ref, watch } from 'vue';
-import { QueryInfoType } from '../types/queryInfoType';
-import { eventBus } from '../events/eventBus';
-import { nextSelection, SelectionTypes } from '../types/selectionTypes';
+import { eventBus } from '../events';
+import { QueryInfoType, SelectionTypes, nextSelection } from '../types';
 
 const props = withDefaults(defineProps<{ items: string[]; color: string; label: string; queryInfo: QueryInfoType; existingFilters?: string[] }>(), {
     existingFilters: () => [],

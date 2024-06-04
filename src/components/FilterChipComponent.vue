@@ -8,11 +8,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { addOrRemoveData } from '../controllers/urlQuery';
-import { QueryInfoType } from '../types/queryInfoType';
 import _ from 'lodash';
-import ChipTypeComponent from './ChipTypeComponent.vue';
+import { useRoute } from 'vue-router';
+import { QueryInfoType } from '../types';
+import { addOrRemoveData } from '../controllers';
+import { ChipTypeComponent } from '../components';
 
 const props = defineProps<{ type: QueryInfoType; data: any }>();
 const route = useRoute();

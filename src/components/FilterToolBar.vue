@@ -12,12 +12,11 @@
 <script setup lang="ts">
 import _ from 'lodash';
 import { onMounted, onUnmounted, ref, Ref } from 'vue';
-import { eventBus } from '../events/eventBus';
-import { OnQueryChangedArgs } from '../events/eventTypes';
-import { QueryInfoType } from '../types/queryInfoType';
 import { useRoute, useRouter } from 'vue-router';
-import { clearRouteQuery } from '../controllers/urlQuery';
-import FilterChipComponent from './FilterChipComponent.vue';
+import { eventBus, OnQueryChangedArgs } from '../events';
+import { QueryInfoType } from '../types';
+import { clearRouteQuery } from '../controllers';
+import { FilterChipComponent } from '../components';
 
 const visible = ref(true);
 const route = useRoute();

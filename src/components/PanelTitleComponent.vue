@@ -25,15 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { Update } from '../types/update';
-import { Environment } from '../types/environment';
-import { Project } from '../types/project';
-import { QueryInfoType } from '../types/queryInfoType';
 import { useRoute } from 'vue-router';
-import { addOrRemoveData } from '../controllers/urlQuery';
-import ChipTypeComponent from './ChipTypeComponent.vue';
-import LinkButtonComponent from './LinkButtonComponent.vue';
-import RouteButtonComponent from './RouteButtonComponent.vue';
+import { Environment, Project, QueryInfoType, Update } from '../types';
+import { addOrRemoveData } from '../controllers';
+import { ChipTypeComponent, LinkButtonComponent, RouteButtonComponent } from '../components';
 
 const props = defineProps<{ onClick: () => void; item: Update | Project | Environment; title: string }>();
 const route = useRoute();

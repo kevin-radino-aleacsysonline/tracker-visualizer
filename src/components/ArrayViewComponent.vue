@@ -28,25 +28,15 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { Reference } from '../types/references';
 import { ref, Ref, watch } from 'vue';
-import { routeAndAddQuery, addOrRemoveData } from '../controllers/urlQuery';
-import { QueryInfoType } from '../types/queryInfoType';
-import ValueCardComponent from './ValueCardComponent.vue';
-import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
-const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
+import { useRoute } from 'vue-router';
+import { Reference, QueryInfoType } from '../types';
+import { routeAndAddQuery, addOrRemoveData } from '../controllers';
+import { ValueClickableCardComponent, ValueCardComponent } from '../components';
 
+const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
 const route = useRoute();
 var panels: Ref<number[]> = ref([0]);
-
-function clickedCard(id: string): void {
-    routeAndAddQuery(props.routeTo, id, QueryInfoType.id);
-}
-
-function onTitleClick(): void {
-    addOrRemoveData(props.routeTo, route, QueryInfoType.innerFocus);
-}
 
 watch(
     route,
@@ -59,6 +49,14 @@ watch(
     },
     { immediate: true }
 );
+
+function clickedCard(id: string): void {
+    routeAndAddQuery(props.routeTo, id, QueryInfoType.id);
+}
+
+function onTitleClick(): void {
+    addOrRemoveData(props.routeTo, route, QueryInfoType.innerFocus);
+}
 </script>
 
 <style scoped>

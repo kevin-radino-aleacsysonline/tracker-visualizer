@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { isValidURL } from '../utils';
 import { DEFAULT_LINK } from '../constants';
+
 defineProps<{ link: string }>();
 
 function navigateTo(url: string): void {

@@ -3,13 +3,9 @@
 </template>
 
 <script setup lang="ts">
-import { Environment } from '../types/environment';
-import { Project } from '../types/project';
-
-import { getDataTypeByRouteName } from '../types/dataTypes';
 import { useRoute } from 'vue-router';
-
-import PanelObjectComponent from './PanelObjectComponent.vue';
+import { Environment, Project, getDataTypeByRouteName } from '../types';
+import { PanelObjectComponent } from '../components';
 
 const props = defineProps<{ objects: Environment[] | Project[] }>();
 const route = useRoute();

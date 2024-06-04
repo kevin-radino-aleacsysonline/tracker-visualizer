@@ -6,17 +6,10 @@
 </template>
 
 <script setup lang="ts">
-import { Update } from '../types/update';
-import { Environment } from '../types/environment';
-import { Project } from '../types/project';
-import { QueryInfoType } from '../types/queryInfoType';
-
 import { useRoute } from 'vue-router';
-import { addOrRemoveData } from '../controllers/urlQuery';
-
-import TableComponent from '../components/TableComponent.vue';
-import PanelTitleComponent from './PanelTitleComponent.vue';
-import { DataType } from '../types/dataTypes';
+import { Update, Environment, Project, QueryInfoType, DataType } from '../types';
+import { addOrRemoveData } from '../controllers';
+import { TableComponent, PanelTitleComponent } from '../components';
 
 const props = defineProps<{ item: Update | Project | Environment; index: number; dataType: DataType }>();
 const route = useRoute();

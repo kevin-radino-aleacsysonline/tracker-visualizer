@@ -9,28 +9,14 @@
 </template>
 
 <script setup lang="ts">
-import { Environment } from '../types/environment';
-import { Project } from '../types/project';
-import { Update } from '../types/update';
-import { DataType } from '../types/dataTypes';
-
 import { Ref, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import PanelEnvironmentProjectComponent from '../components/PanelEnvironmentProjectComponent.vue';
-import PanelUpdateComponent from './PanelUpdateComponent.vue';
-import { IIdentifiable } from '../types/identifiable';
+import { DataType, Environment, Project, Update, IIdentifiable } from '../types';
+import { PanelEnvironmentProjectComponent, PanelUpdateComponent } from '../components';
 
 const props = defineProps<{ requestedObjects: IIdentifiable[]; dataType: DataType }>();
 const route = useRoute();
 var panels: Ref<number[]> = ref([]);
-
-function castToEnvironmentOrProject(): Project[] | Environment[] {
-    return props.dataType === DataType.Projects ? (props.requestedObjects as Project[]) : (props.requestedObjects as Environment[]);
-}
-
-function castToUpdate(): Update[] {
-    return props.requestedObjects as Update[];
-}
 
 watch(
     route,
@@ -43,6 +29,14 @@ watch(
     },
     { immediate: true }
 );
+
+function castToEnvironmentOrProject(): Project[] | Environment[] {
+    return props.dataType === DataType.Projects ? (props.requestedObjects as Project[]) : (props.requestedObjects as Environment[]);
+}
+
+function castToUpdate(): Update[] {
+    return props.requestedObjects as Update[];
+}
 </script>
 
 <style scoped>

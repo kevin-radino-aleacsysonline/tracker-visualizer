@@ -17,18 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, Ref, onUnmounted, onMounted } from 'vue';
-import { eventBus } from '../events/eventBus';
-import { OnViewUpdateArgs, OnViewLoadingArgs, OnFilterChangedArgs } from '../events/eventTypes';
-import { getTypesByDataType } from '../controllers/helpers';
-import { setMultipleQueries, getDataTypeRoute } from '../controllers/urlQuery';
-import { useRoute } from 'vue-router';
-import DropdownComponent from './DropdownComponent.vue';
-import { QueryInfoType } from '../types/queryInfoType';
 import _ from 'lodash';
+import { ref, watch, Ref, onUnmounted, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { eventBus, OnViewUpdateArgs, OnViewLoadingArgs, OnFilterChangedArgs } from '../events';
+import { QueryInfoType, SelectionTypes, ButtonTypes } from '../types';
+import { getTypesByDataType, setMultipleQueries, getDataTypeRoute } from '../controllers';
+import { DropdownComponent } from '../components';
 import { COLORS_QUERY, COLORS_BUTTONS } from '../constants';
-import { SelectionTypes } from '../types/selectionTypes';
-import { ButtonTypes } from '../types/buttonTypes';
 
 const props = defineProps<{ showDialog: boolean }>();
 const emits = defineEmits<{ (e: 'update:showDialog', value: boolean): void }>();
