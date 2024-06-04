@@ -35,7 +35,7 @@ export function filterData(toFilter: IIdentifiable[], queryTypes: QueryInfoType[
 
     let result: IIdentifiable[] = [];
     queryTypes.forEach((queryType, index) => {
-        result = _.union(filter(_.cloneDeep(toFilter), queryType, filterValues[index]), result);
+        result = _.union(filter(toFilter, queryType, filterValues[index]), result);
     });
 
     return result;
@@ -65,17 +65,36 @@ function getDataByType(dataType: DataType): object[] {
     }
 }
 
-export async function getEnvironments(): Promise<Map<string, Environment>> {
+async function getEnvironments(): Promise<Map<string, Environment>> {
     await wait(2000);
     return fetchData<Environment>(DataType.Environments);
 }
 
-export async function getProjects(): Promise<Map<string, Project>> {
+async function getProjects(): Promise<Map<string, Project>> {
     await wait(2000);
     return fetchData<Project>(DataType.Projects);
 }
 
-export async function getUpdates(): Promise<Map<string, Update>> {
+async function getUpdates(): Promise<Map<string, Update>> {
     await wait(2000);
     return fetchData<Update>(DataType.Updates);
+}
+
+export function getFetchFunction(dataType: DataType): Promise<Map<string, IIdentifiable>> {
+    if (dataType === DataType.Environments) {
+        return getEnvironments();
+    } else if (dataType === DataType.Projects) {
+        return getProjects();
+    } else {
+        return getUpdates();
+    }
+}
+
+export async function fetchAllData(): Promise<Map<string, IIdentifiable>> {
+    await wait(2000);
+    const environments = await fetchData<Environment>(DataType.Environments);
+    const projects = await fetchData<Project>(DataType.Projects);
+    const updates = await fetchData<Update>(DataType.Updates);
+    const combined = [...environments.values(), ...projects.values(), ...updates.values()].map((item) => [item.id, item] as const);
+    return new Map<string, IIdentifiable>(combined);
 }

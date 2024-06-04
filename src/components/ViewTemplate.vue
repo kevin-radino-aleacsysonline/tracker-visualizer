@@ -13,7 +13,7 @@ import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { eventBus } from '../events';
 import { DataType, IIdentifiable, QueryInfoType } from '../types';
-import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers';
+import { filterData, getFetchFunction } from '../controllers';
 import { PanelsComponent } from '../components';
 
 var isLoading = ref(true);
@@ -36,19 +36,9 @@ watch(route, async () => {
     filterFetchedData();
 });
 
-async function setFetchFunction(dataType: DataType): Promise<void> {
-    if (dataType === DataType.Environments) {
-        fetchedData = await getEnvironments();
-    } else if (dataType === DataType.Projects) {
-        fetchedData = await getProjects();
-    } else if (dataType === DataType.Updates) {
-        fetchedData = await getUpdates();
-    }
-}
-
 async function fetchData(refreshData = true): Promise<void> {
     if (refreshData) {
-        await setFetchFunction(props.dataType);
+        fetchedData = await getFetchFunction(props.dataType);
     }
     requestedData.value = [];
     fetchedData.forEach((value) => {

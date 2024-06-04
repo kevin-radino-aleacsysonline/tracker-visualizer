@@ -36,6 +36,7 @@ const routes = [
         path: '/focus',
         name: 'Focus',
         component: FocusView,
+        props: true,
     },
 ];
 

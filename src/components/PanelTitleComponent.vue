@@ -18,7 +18,7 @@
                 <link-button-component :link="getUrl() ?? ''"></link-button-component>
             </v-col>
             <v-col cols="1">
-                <route-button-component></route-button-component>
+                <route-button-component :item :type="getDataTypeRoute(route)"></route-button-component>
             </v-col>
         </v-row>
     </v-expansion-panel-title>
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { Environment, Project, QueryInfoType, Update } from '../types';
-import { addOrRemoveData } from '../controllers';
+import { addOrRemoveData, getDataTypeRoute } from '../controllers';
 import { ChipTypeComponent, LinkButtonComponent, RouteButtonComponent } from '../components';
 
 const props = defineProps<{ onClick: () => void; item: Update | Project | Environment; title: string }>();

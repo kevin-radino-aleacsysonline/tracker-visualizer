@@ -31,7 +31,7 @@
 import { ref, Ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Reference, QueryInfoType } from '../types';
-import { routeAndAddQuery, addOrRemoveData } from '../controllers';
+import { refreshRouteWithQuery, addOrRemoveData } from '../controllers';
 import { ValueCardComponent } from '../components';
 
 const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
@@ -51,7 +51,7 @@ watch(
 );
 
 function clickedCard(id: string): void {
-    routeAndAddQuery(props.routeTo, id, QueryInfoType.id);
+    refreshRouteWithQuery(props.routeTo, id, QueryInfoType.id);
 }
 
 function onTitleClick(): void {

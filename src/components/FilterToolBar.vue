@@ -17,6 +17,7 @@ import { eventBus, OnQueryChangedArgs } from '../events';
 import { QueryInfoType } from '../types';
 import { clearRouteQuery } from '../controllers';
 import { FilterChipComponent } from '../components';
+import { FOCUS } from '../constants';
 
 const visible = ref(true);
 const route = useRoute();
@@ -30,6 +31,10 @@ eventBus.on('onFiltersClear', onFiltersClearHandler);
 
 onMounted(async () => {
     await router.isReady();
+    if (route.name === FOCUS) {
+        visible.value = false;
+        return;
+    }
     const query = route.query;
     Object.keys(query).forEach((key) => {
         const type = QueryInfoType[key as keyof typeof QueryInfoType];

@@ -1,11 +1,18 @@
 <template>
     <div class="button-wrapper">
-        <v-btn icon="mdi-magnify" variant="tonal" :to="{ name: 'Focus' }"> </v-btn>
-        <!-- <v-btn icon="mdi-magnify" variant="tonal" @click.stop="console.error('test')" :to="{ name: 'Focus' }"> </v-btn> -->
+        <v-btn icon="mdi-magnify" @click.stop="onButtonClick" variant="tonal"> </v-btn>
     </div>
 </template>
 <script setup lang="ts">
-// import { useRoute } from 'vue-router';
-// import { routeAndAddQuery } from '../controllers/urlQuery';
-// const route = useRoute();
+import { DataType, IIdentifiable, QueryInfoType } from '../types';
+import { clearRouteQuery, refreshRouteWithQuery } from '../controllers/';
+import { FOCUSSED_ITEM } from '../constants';
+
+const props = defineProps<{ item: IIdentifiable; type: DataType }>();
+
+function onButtonClick(): void {
+    localStorage.setItem(FOCUSSED_ITEM, JSON.stringify(props.item));
+    clearRouteQuery();
+    refreshRouteWithQuery('focus', props.item.id, QueryInfoType.id);
+}
 </script>

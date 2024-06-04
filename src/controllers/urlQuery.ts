@@ -70,7 +70,7 @@ function removeQueryFilter(route: RouteLocationNormalizedLoaded, queryType: Quer
     eventBus.emit('onQueryChange', { type: queryType, data, remove: true });
 }
 
-export function routeAndAddQuery(routeTo: string, data: any, queryInfoType: QueryInfoType): void {
+export function refreshRouteWithQuery(routeTo: string, data: any, queryInfoType: QueryInfoType): void {
     const query = {
         [queryInfoType]: data,
     };
