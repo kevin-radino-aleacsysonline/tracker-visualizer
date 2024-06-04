@@ -1,9 +1,9 @@
 <template>
     <v-tooltip v-for="value in data.split('_')" top>
         <template v-slot:activator="{ props }">
-            <v-chip class="chip-padding" :prepend-icon="queryTypeIconMap[type]" :color="queryTypeColorMap[type]" v-bind="props" @click="handleClose(value, type)">{{ value }}</v-chip>
+            <chip-type-component class="chip-padding" :type :on-click-callback="() => handleClose(value, type)" :use-icon="true" :props>{{ value }}</chip-type-component>
         </template>
-        <span>{{ value }}</span>
+        <span>{{ type }}</span>
     </v-tooltip>
 </template>
 
@@ -12,22 +12,10 @@ import { useRoute } from 'vue-router';
 import { addOrRemoveData } from '../controllers/urlQuery';
 import { QueryInfoType } from '../types/queryInfoType';
 import _ from 'lodash';
+import ChipTypeComponent from './ChipTypeComponent.vue';
 
 const props = defineProps<{ type: QueryInfoType; data: any }>();
 const route = useRoute();
-
-const queryTypeIconMap: Record<QueryInfoType, string> = {
-    [QueryInfoType.focus]: 'mdi-crosshairs',
-    [QueryInfoType.innerFocus]: 'mdi-crosshairs-gps',
-    [QueryInfoType.id]: 'mdi-star',
-    [QueryInfoType.type]: 'mdi-tag',
-};
-const queryTypeColorMap: Record<QueryInfoType, string> = {
-    [QueryInfoType.focus]: 'teal',
-    [QueryInfoType.innerFocus]: 'green',
-    [QueryInfoType.id]: 'orange',
-    [QueryInfoType.type]: 'primary',
-};
 
 function handleClose(data: string, type: QueryInfoType): void {
     const dataArr: string[] = props.data.split('_');

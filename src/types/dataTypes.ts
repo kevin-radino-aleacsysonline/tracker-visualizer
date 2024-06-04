@@ -1,14 +1,13 @@
-import { capitalize } from 'lodash';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 export enum DataType {
-    Environments = 'environments',
-    Projects = 'projects',
-    Updates = 'updates',
+    Environments = 'Environments',
+    Projects = 'Projects',
+    Updates = 'Updates',
 }
 
 export function getDataTypeByRouteName(route: RouteLocationNormalizedLoaded): DataType {
-    const type = DataType[capitalize(route.name?.toString()) as keyof typeof DataType];
+    const type = DataType[route.name?.toString() as keyof typeof DataType];
     if (type === DataType.Environments) {
         return DataType.Environments;
     } else if (type === DataType.Projects) {

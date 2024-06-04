@@ -9,9 +9,9 @@
             <v-navigation-drawer v-model="drawer" expand-on-hover rail mobile-breakpoint="md">
                 <v-list>
                     <v-divider></v-divider>
-                    <v-list-item prepend-icon="mdi-sprout" color="green" title="Environments" :to="{ name: 'Environments' }" @click="onListItemClicked"></v-list-item>
-                    <v-list-item prepend-icon="mdi-lightbulb-variant" color="primary" title="Projects" :to="{ name: 'Projects' }" @click="onListItemClicked"></v-list-item>
-                    <v-list-item prepend-icon="mdi-update" color="orange" title="Updates" :to="{ name: 'Updates' }" @click="onListItemClicked"></v-list-item>
+                    <v-list-item :prepend-icon="ICONS_VIEWS[DataType.Environments]" :color="COLORS_VIEWS[DataType.Environments]" :title="DataType.Environments" :to="{ name: 'Environments' }" @click="onListItemClicked"></v-list-item>
+                    <v-list-item :prepend-icon="ICONS_VIEWS[DataType.Projects]" :color="COLORS_VIEWS[DataType.Projects]" :title="DataType.Projects" :to="{ name: 'Projects' }" @click="onListItemClicked"></v-list-item>
+                    <v-list-item :prepend-icon="ICONS_VIEWS[DataType.Updates]" :color="COLORS_VIEWS[DataType.Updates]" :title="DataType.Updates" :to="{ name: 'Updates' }" @click="onListItemClicked"></v-list-item>
                     <v-divider></v-divider>
                     <v-list-item prepend-icon="mdi-filter" color="blue" title="Filter" @click="openFilterDialog"></v-list-item>
                     <filter-chip-list-component></filter-chip-list-component>
@@ -34,6 +34,8 @@ import ToggleThemeComponent from './components/ToggleThemeComponent.vue';
 import FilterChipListComponent from './components/FilterChipListComponent.vue';
 import FilterDialog from './components/FilterDialog.vue';
 import FilterToolBar from './components/FilterToolBar.vue';
+import { COLORS_VIEWS, ICONS_VIEWS } from './constants';
+import { DataType } from './types/dataTypes';
 
 const drawer = ref(true);
 const dialog = ref(false);

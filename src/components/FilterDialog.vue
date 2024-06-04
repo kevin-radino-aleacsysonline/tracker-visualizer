@@ -3,14 +3,14 @@
         <v-card>
             <v-card-title class="headline">Apply filters</v-card-title>
             <v-card-text v-if="!isLoading">
-                <dropdown-component v-if="typeItems" :label="'Type'" :color="'blue'" :items="typeItems" :query-info="QueryInfoType.type" :existing-filters="typeItemsSelected"></dropdown-component>
+                <dropdown-component v-if="typeItems" :label="'Type'" :color="COLORS_QUERY[QueryInfoType.type][SelectionTypes.neutral]" :items="typeItems" :query-info="QueryInfoType.type" :existing-filters="typeItemsSelected"></dropdown-component>
                 <v-divider></v-divider>
-                <dropdown-component :label="'Id'" :color="'orange'" :items="idItems" :query-info="QueryInfoType.id" :existing-filters="idItemsSelected"></dropdown-component
+                <dropdown-component :label="'Id'" :color="COLORS_QUERY[QueryInfoType.id][SelectionTypes.neutral]" :items="idItems" :query-info="QueryInfoType.id" :existing-filters="idItemsSelected"></dropdown-component
             ></v-card-text>
             <v-card-text v-else>Loading...</v-card-text>
             <v-card-actions>
-                <v-btn color="red" @click="onCancelClick">Cancel</v-btn>
-                <v-btn color="green" @click="onSubmitClick">Sumbit</v-btn>
+                <v-btn :color="COLORS_BUTTONS[ButtonTypes.Cancel]" @click="onCancelClick">Cancel</v-btn>
+                <v-btn :color="COLORS_BUTTONS[ButtonTypes.Submit]" @click="onSubmitClick">Sumbit</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -26,6 +26,9 @@ import { useRoute } from 'vue-router';
 import DropdownComponent from './DropdownComponent.vue';
 import { QueryInfoType } from '../types/queryInfoType';
 import _ from 'lodash';
+import { COLORS_QUERY, COLORS_BUTTONS } from '../constants';
+import { SelectionTypes } from '../types/selectionTypes';
+import { ButtonTypes } from '../types/buttonTypes';
 
 const props = defineProps<{ showDialog: boolean }>();
 const emits = defineEmits<{ (e: 'update:showDialog', value: boolean): void }>();
