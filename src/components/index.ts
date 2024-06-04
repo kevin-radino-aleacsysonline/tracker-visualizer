@@ -18,7 +18,6 @@ import TableComponent from './TableComponent.vue';
 import TableRow from './TableRow.vue';
 import ToggleThemeComponent from './ToggleThemeComponent.vue';
 import ValueCardComponent from './ValueCardComponent.vue';
-import ValueClickableCardComponent from './ValueClickableCardComponent.vue';
 import ViewTemplate from './ViewTemplate.vue';
 
 export {
@@ -42,6 +41,5 @@ export {
     TableRow,
     ToggleThemeComponent,
     ValueCardComponent,
-    ValueClickableCardComponent,
     ViewTemplate,
 };

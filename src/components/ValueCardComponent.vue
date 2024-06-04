@@ -1,5 +1,5 @@
 <template>
-    <v-card color="primary" variant="tonal">
+    <v-card :class="{ 'clickable-card': onClicked !== undefined }" color="primary" variant="tonal" @click="onClicked">
         <v-card-title>
             <slot name="title"></slot>
         </v-card-title>
@@ -9,11 +9,18 @@
     </v-card>
 </template>
 
+<script setup lang="ts">
+defineProps<{ onClicked?: () => void }>();
+</script>
+
 <style scoped>
 .v-card-title {
     font-size: 16px;
     white-space: normal;
     overflow: hidden;
     line-height: 1.1em;
+}
+.clickable-card {
+    cursor: pointer;
 }
 </style>

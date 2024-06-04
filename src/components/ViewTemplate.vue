@@ -11,8 +11,8 @@
 import _ from 'lodash';
 import { onMounted, ref, watch, Ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { DataType, IIdentifiable, QueryInfoType } from '../types';
 import { eventBus } from '../events';
+import { DataType, IIdentifiable, QueryInfoType } from '../types';
 import { getEnvironments, getProjects, getUpdates, filterData } from '../controllers';
 import { PanelsComponent } from '../components';
 

@@ -6,14 +6,14 @@
                 <div class="padding">
                     <v-row class="align-baseline">
                         <v-col v-for="(value, index) in dataArray" :key="index" cols="12" sm="4">
-                            <value-clickable-card-component v-if="type === 'object' && value as Reference !== null" :onClicked="() => clickedCard((value as Reference).id)">
+                            <value-card-component v-if="type === 'object' && value as Reference !== null" :onClicked="() => clickedCard((value as Reference).id)">
                                 <template #title>
                                     {{ (value as Reference).id }}
                                 </template>
                                 <template #content v-if="(value as Reference).latest">
                                     {{ (value as Reference).latest }}
                                 </template>
-                            </value-clickable-card-component>
+                            </value-card-component>
                             <value-card-component v-if="type !== 'object'">
                                 <template #title>
                                     {{ value }}
@@ -32,7 +32,7 @@ import { ref, Ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Reference, QueryInfoType } from '../types';
 import { routeAndAddQuery, addOrRemoveData } from '../controllers';
-import { ValueClickableCardComponent, ValueCardComponent } from '../components';
+import { ValueCardComponent } from '../components';
 
 const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
 const route = useRoute();
