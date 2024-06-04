@@ -40,6 +40,20 @@ export function addOrRemoveData(data: any, route: RouteLocationNormalizedLoaded,
     }
 }
 
+export function setOrRemoveData(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
+    const castedData = `${data}`;
+    const currentData = route.query[queryType]?.toString();
+    if (!currentData) {
+        setQueryFilter(data, route, queryType);
+    } else {
+        if (castedData === currentData) {
+            removeQueryFilter(route, queryType);
+        } else {
+            setQueryFilter(data, route, queryType);
+        }
+    }
+}
+
 function setQueryFilter(data: any, route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     const newQuery = {
         ...route.query,
@@ -73,7 +87,6 @@ export function refreshRouteWithQuery(routeTo: string, data: any, queryInfoType:
 
 export function clearRouteQuery(): void {
     router.push({ query: {} });
-    // eventBus.emit('onFiltersClear', {});
 }
 
 export function getDataTypeRoute(route: RouteLocationNormalizedLoaded): DataType {

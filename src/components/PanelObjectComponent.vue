@@ -8,14 +8,14 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { Update, Environment, Project, QueryInfoType, DataType } from '../types';
-import { addOrRemoveData } from '../controllers';
+import { setOrRemoveData } from '../controllers';
 import { TableComponent, PanelTitleComponent } from '../components';
 
 const props = defineProps<{ item: Update | Project | Environment; index: number; dataType: DataType }>();
 const route = useRoute();
 
 function onTitleClick(index: number): void {
-    addOrRemoveData(index.toString(), route, QueryInfoType.focus);
+    setOrRemoveData(index.toString(), route, QueryInfoType.focus);
 }
 
 function getTitle(): string {

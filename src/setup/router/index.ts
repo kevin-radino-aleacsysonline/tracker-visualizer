@@ -48,15 +48,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-    if (to.name === from.name) {
-        if (to.query !== from.query) {
-            const gained = _.difference(_.keys(to.query), _.keys(from.query));
-            const lost = _.difference(_.keys(from.query), _.keys(to.query));
-            emitQueryChange(lost, from.query, true);
-            emitQueryChange(gained, to.query);
-            // TODO: When none gained and none lost => m.a.w. cluster-namespace_registry -> registry, same amount of queries
-        }
-    }
+    // if (to.name === from.name) {
+    // if (to.query !== from.query) {
+    const gained = _.difference(_.keys(to.query), _.keys(from.query));
+    const lost = _.difference(_.keys(from.query), _.keys(to.query));
+    emitQueryChange(lost, from.query, true);
+    emitQueryChange(gained, to.query);
+    // TODO: When none gained and none lost => m.a.w. cluster-namespace_registry -> registry, same amount of queries
+
+    // }
+    // }
 });
 
 function emitQueryChange(arr: string[], query: any, remove = false): void {
