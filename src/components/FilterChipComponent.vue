@@ -18,9 +18,10 @@ const props = defineProps<{ type: QueryInfoType; data: any }>();
 const route = useRoute();
 
 function handleClose(data: string, type: QueryInfoType): void {
-    const dataArr: string[] = props.data.split('_');
+    console.error(data);
+    let dataArr: string[] = props.data.split('_');
     if (dataArr.includes(data)) {
-        _.remove(dataArr, (element) => element === data);
+        dataArr = _.remove(dataArr, (element) => element === data);
     }
     if (dataArr.length > 0) {
         const dataStr = dataArr.join('_');

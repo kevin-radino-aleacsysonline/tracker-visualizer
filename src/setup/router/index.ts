@@ -54,6 +54,7 @@ router.beforeEach((to, from) => {
             const lost = _.difference(_.keys(from.query), _.keys(to.query));
             emitQueryChange(lost, from.query, true);
             emitQueryChange(gained, to.query);
+            // TODO: When none gained and none lost => m.a.w. cluster-namespace_registry -> registry, same amount of queries
         }
     }
 });
@@ -65,7 +66,7 @@ function emitQueryChange(arr: string[], query: any, remove = false): void {
     for (let i = 0; i < arr.length; i++) {
         const type = arr[i] as QueryInfoType;
         if (type) {
-            // console.error(type, query[type], query, remove);
+            console.error(type, query[type], query, remove);
             eventBus.emit('onQueryChange', { type, data: query[type], remove });
         }
     }

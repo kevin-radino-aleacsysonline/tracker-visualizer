@@ -1,7 +1,7 @@
 <template>
     <v-select :color="props.color" hide-details v-model="selectedValues" :items="props.items" :label="props.label" multiple>
         <template v-slot:item="{ item }">
-            <v-list-item @click="toggleSelection(item)">
+            <v-list-item v-bind="$attrs" @click="toggleSelection(item)">
                 <v-list-item-action>
                     <v-icon class="icon-spacing">{{ getSelectionIcon(item) }}</v-icon>
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -44,7 +44,15 @@ function toggleSelection(item: any): void {
     const index = props.items.findIndex((i) => i === item.value);
     if (index > -1) {
         selectionTypes.value[index] = nextSelection[selectionTypes.value[index]];
-        console.error(selectionTypes.value);
+        if (selectionTypes.value[index] !== SelectionTypes.neutral) {
+            if (!selectedValues.value.includes(item.value)) {
+                selectedValues.value.push(item.value);
+            }
+        } else {
+            if (selectedValues.value.includes(item.value)) {
+                selectedValues.value = selectedValues.value.filter((value) => value !== item.value);
+            }
+        }
     }
 }
 
