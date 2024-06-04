@@ -30,7 +30,6 @@ const route = useRoute();
 const router = useRouter();
 
 eventBus.on('onQueryChange', onQueryChangeHandler);
-eventBus.on('onFiltersClear', onFiltersClearHandler);
 
 onMounted(async () => {
     await router.isReady();
@@ -49,7 +48,6 @@ onMounted(async () => {
 
 onUnmounted(() => {
     eventBus.off('onQueryChange', onQueryChangeHandler);
-    eventBus.on('onFiltersClear', onFiltersClearHandler);
 });
 
 function onQueryChangeHandler(args: OnQueryChangedArgs): void {
@@ -61,13 +59,6 @@ function onQueryChangeHandler(args: OnQueryChangedArgs): void {
         }
     }
     updateView();
-}
-
-function onFiltersClearHandler(): void {
-    if (currentFilters.value.size !== 0 || visible.value) {
-        currentFilters.value.clear();
-        visible.value = false;
-    }
 }
 
 function updateView(): void {

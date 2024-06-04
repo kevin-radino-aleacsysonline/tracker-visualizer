@@ -27,9 +27,17 @@ const currentFilters: Ref<Map<QueryInfoType, any>> = ref(new Map<QueryInfoType, 
 
 eventBus.on('onQueryChange', onQueryChangeHandler);
 eventBus.on('onQueryReset', closeFilterToolBar);
-eventBus.on('onFiltersClear', onFiltersClearHandler);
 
 onMounted(async () => {
+    await onMountedRouteCheck();
+});
+
+onUnmounted(() => {
+    eventBus.off('onQueryChange', onQueryChangeHandler);
+    eventBus.off('onQueryReset', closeFilterToolBar);
+});
+
+async function onMountedRouteCheck(): Promise<void> {
     await router.isReady();
     if (route.name === FOCUS) {
         visible.value = false;
@@ -43,13 +51,7 @@ onMounted(async () => {
         }
     });
     updateToolBar();
-});
-
-onUnmounted(() => {
-    eventBus.off('onQueryChange', onQueryChangeHandler);
-    eventBus.off('onQueryReset', closeFilterToolBar);
-    eventBus.off('onFiltersClear', onFiltersClearHandler);
-});
+}
 
 function updateToolBar(): void {
     visible.value = currentFilters.value.size > 0;
@@ -59,13 +61,6 @@ function closeFilterToolBar() {
     visible.value = false;
     currentFilters.value.clear();
     clearRouteQuery();
-}
-
-function onFiltersClearHandler(): void {
-    if (currentFilters.value.size !== 0 || visible.value) {
-        currentFilters.value.clear();
-        visible.value = false;
-    }
 }
 
 function onQueryChangeHandler(args: OnQueryChangedArgs): void {

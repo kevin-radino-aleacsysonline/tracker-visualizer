@@ -5,7 +5,7 @@
 </template>
 <script setup lang="ts">
 import { DataType, IIdentifiable, QueryInfoType } from '../types';
-import { clearRouteQuery, refreshRouteWithQuery } from '../controllers/';
+import { refreshRouteWithQuery, clearRouteQuery } from '../controllers/';
 import { FOCUSSED_ITEM } from '../constants';
 
 const props = defineProps<{ item: IIdentifiable; type: DataType }>();

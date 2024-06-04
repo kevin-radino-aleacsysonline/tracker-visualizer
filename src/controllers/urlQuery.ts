@@ -2,7 +2,6 @@ import router from '../setup/router';
 
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { QueryInfoType } from '../types/queryInfoType';
-import { eventBus } from '../events/eventBus';
 import { DataType } from '../types/dataTypes';
 import _ from 'lodash';
 
@@ -47,7 +46,6 @@ function setQueryFilter(data: any, route: RouteLocationNormalizedLoaded, queryTy
         [queryType]: data,
     };
     router.push({ query: newQuery });
-    eventBus.emit('onQueryChange', { type: queryType, data });
 }
 
 function overwriteAllQueries(query: any): void {
@@ -56,18 +54,14 @@ function overwriteAllQueries(query: any): void {
         const type: QueryInfoType = key as QueryInfoType;
         if (type === undefined) {
             console.error('unknown type conversion', key);
-        } else {
-            eventBus.emit('onQueryChange', { type, data: query[key] });
         }
     }
 }
 
 function removeQueryFilter(route: RouteLocationNormalizedLoaded, queryType: QueryInfoType): void {
     const query = { ...route.query };
-    const data = query[queryType]?.toString();
     delete query[queryType];
     router.push({ query: query });
-    eventBus.emit('onQueryChange', { type: queryType, data, remove: true });
 }
 
 export function refreshRouteWithQuery(routeTo: string, data: any, queryInfoType: QueryInfoType): void {
@@ -79,7 +73,7 @@ export function refreshRouteWithQuery(routeTo: string, data: any, queryInfoType:
 
 export function clearRouteQuery(): void {
     router.push({ query: {} });
-    eventBus.emit('onFiltersClear', {});
+    // eventBus.emit('onFiltersClear', {});
 }
 
 export function getDataTypeRoute(route: RouteLocationNormalizedLoaded): DataType {

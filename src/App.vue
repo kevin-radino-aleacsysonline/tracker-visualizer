@@ -27,15 +27,13 @@
 </template>
 
 <script setup lang="ts">
+import _ from 'lodash';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { eventBus } from './events/eventBus';
-import ToggleThemeComponent from './components/ToggleThemeComponent.vue';
-import FilterChipListComponent from './components/FilterChipListComponent.vue';
-import FilterDialog from './components/FilterDialog.vue';
-import FilterToolBar from './components/FilterToolBar.vue';
+import { eventBus } from './events';
+import { DataType } from './types';
+import { ToggleThemeComponent, FilterChipListComponent, FilterDialog, FilterToolBar } from './components';
 import { COLORS_VIEWS, ICONS_VIEWS } from './constants';
-import { DataType } from './types/dataTypes';
 
 const drawer = ref(true);
 const dialog = ref(false);
