@@ -4,7 +4,7 @@
             <component v-if="key in computedComponents" :is="computedComponents[key].view" v-bind="computedComponents[key].props">
                 <template #title> {{ _.capitalize(key) }} </template>
             </component>
-            <v-label v-else>{{ key }}</v-label>
+            <v-label v-else>{{ key }}, </v-label>
         </template>
     </v-container>
 </template>
@@ -22,6 +22,8 @@ var item: Ref<IIdentifiable | undefined> = ref(undefined);
 var type: DataType;
 const route = useRoute();
 const router = useRouter();
+
+// TODO: loading and skeleton loader for this view
 
 onMounted(async () => {
     await router.isReady();
@@ -116,7 +118,11 @@ function getIdBreadcrumbs(): BreadcrumbsItemSlotType[] {
     }
 
     if (item.value.name) {
+        // if name
         crumbs.push({ title: item.value.name.toLowerCase() });
+    } else {
+        // else id
+        crumbs.push({ title: item.value.id.toLowerCase() });
     }
 
     return crumbs;

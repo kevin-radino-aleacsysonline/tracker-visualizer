@@ -20,6 +20,8 @@ import { computed } from 'vue';
 import { DataType, Reference } from '../types';
 import { COLORS_VIEWS } from '../constants';
 
+// TODO: link the btn to another view
+
 const height = 64;
 const props = defineProps<{ items: Reference[] | undefined; dataType?: DataType }>();
 const borderColorStyle = computed(() => {

@@ -11,6 +11,8 @@
 <script setup lang="ts">
 import { BreadcrumbsItemSlotType } from '../types';
 
+// TOOD: put href in titles
+
 defineProps<{ items: BreadcrumbsItemSlotType[] }>();
 </script>
 
