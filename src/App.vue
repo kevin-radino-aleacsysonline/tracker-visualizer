@@ -6,8 +6,9 @@
                 <v-app-bar-title>Update Tracker</v-app-bar-title>
                 <toggle-theme-component></toggle-theme-component>
             </v-app-bar>
-            <v-navigation-drawer v-model="drawer" expand-on-hover rail mobile-breakpoint="md">
+            <v-navigation-drawer v-model="drawer" expand-on-hover :rail mobile-breakpoint="md">
                 <v-list>
+                    <v-list-item :prepend-icon="rail ? 'mdi-toggle-switch-off-outline' : 'mdi-toggle-switch'" @click="onToggleClick" :title="'Toggle Hover'"></v-list-item>
                     <v-divider></v-divider>
                     <v-list-item :prepend-icon="ICONS_VIEWS[DataType.Environments]" :color="COLORS_VIEWS[DataType.Environments]" :title="DataType.Environments" :to="{ name: 'Environments' }" @click="onListItemClicked"></v-list-item>
                     <v-list-item :prepend-icon="ICONS_VIEWS[DataType.Projects]" :color="COLORS_VIEWS[DataType.Projects]" :title="DataType.Projects" :to="{ name: 'Projects' }" @click="onListItemClicked"></v-list-item>
@@ -28,7 +29,7 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { eventBus } from './events';
 import { DataType } from './types';
@@ -37,7 +38,17 @@ import { COLORS_VIEWS, ICONS_VIEWS } from './constants';
 
 const drawer = ref(true);
 const dialog = ref(false);
+const rail = ref(true);
 const route = useRoute();
+
+onMounted(() => {
+    const railed = localStorage.getItem('rail');
+    if (railed === 'true') {
+        rail.value = true;
+    } else {
+        rail.value = false;
+    }
+});
 
 const toggleDrawer = () => {
     drawer.value = !drawer.value;
@@ -53,6 +64,11 @@ function openFilterDialog(): void {
 
 function updateDialog(visible: boolean): void {
     dialog.value = visible;
+}
+
+function onToggleClick(): void {
+    rail.value = !rail.value;
+    localStorage.setItem('rail', rail.value.toString());
 }
 </script>
 
