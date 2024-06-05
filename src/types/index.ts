@@ -6,6 +6,8 @@ export type { Reference } from './references';
 export type { UpdateGit } from './updateGit';
 export type { UpdateOutput } from './updateOutput';
 
+export type { BreadcrumbsItemSlotType } from './breadcrumbsTypes';
+
 export { EnvironmentType } from './environmentTypes';
 export { ProjectType } from './projectTypes';
 export { UpdateType } from './updateTypes';

@@ -7,10 +7,12 @@ import FilterChipListComponent from './FilterChipListComponent.vue';
 import FilterDialog from './FilterDialog.vue';
 import FilterToolBar from './FilterToolBar.vue';
 import FocusView from './FocusView.vue';
+import FocusViewId from './FocusViewId.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
 import PanelEnvironmentProjectComponent from './PanelEnvironmentProjectComponent.vue';
 import PanelObjectComponent from './PanelObjectComponent.vue';
 import PanelsComponent from './PanelsComponent.vue';
+import PanelsLoadingComponent from './PanelsLoadingComponent.vue';
 import PanelTitleComponent from './PanelTitleComponent.vue';
 import PanelUpdateComponent from './PanelUpdateComponent.vue';
 import RouteButtonComponent from './RouteButtonComponent.vue';
@@ -30,10 +32,12 @@ export {
     FilterDialog,
     FilterToolBar,
     FocusView,
+    FocusViewId,
     LinkButtonComponent,
     PanelEnvironmentProjectComponent,
     PanelObjectComponent,
     PanelsComponent,
+    PanelsLoadingComponent,
     PanelTitleComponent,
     PanelUpdateComponent,
     RouteButtonComponent,

@@ -83,7 +83,7 @@ function emitQueryAddOrRemove(arr: string[], query: any, remove = false): void {
     for (let i = 0; i < arr.length; i++) {
         const type = arr[i] as QueryInfoType;
         if (type) {
-            console.error(type, query[type], query, remove);
+            // console.error(type, query[type], query, remove);
             eventBus.emit('onQueryChange', { type, data: query[type], remove });
         }
     }

@@ -1,15 +1,22 @@
 <template>
-    <v-label v-if="item !== null && item !== undefined" v-for="key in Object.entries(item)"> {{ key[0] }}, {{ key[1] }}</v-label>
+    <v-container v-if="item !== null && item !== undefined">
+        <template v-for="key in Object.entries(item)">
+            <component v-if="key[0] in computedComponents" :is="computedComponents[key[0]].view" v-bind="computedComponents[key[0]].props"></component>
+            <v-label v-else>{{ key[0] }}, {{ key[1] }}</v-label>
+        </template>
+    </v-container>
 </template>
 
 <script setup lang="ts">
-import { onUnmounted, onMounted, Ref, ref } from 'vue';
+import { onMounted, Ref, computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { IIdentifiable, QueryInfoType } from '../types';
+import { DataType, IIdentifiable, QueryInfoType } from '../types';
 import { fetchAllData } from '../controllers';
+import { FocusViewId } from '../components';
 import { FOCUSSED_ITEM } from '../constants';
 
 var item: Ref<IIdentifiable | undefined> = ref(undefined);
+var type: DataType;
 const route = useRoute();
 const router = useRouter();
 
@@ -22,25 +29,71 @@ onMounted(async () => {
 
     if (id && tempItem?.id === id) {
         // loading data stored from other view
-        item.value = tempItem;
+        setItem(tempItem);
         return;
     }
 
     const map = await fetchAllData();
     if (id && map.has(id)) {
         // loading data when not coming from other view
-        item.value = map.get(id);
+        setItem(map.get(id));
         return;
     }
 
     if (!id && tempItem) {
         // loading previously visited data
-        item.value = tempItem;
+        setItem(tempItem);
         return;
     }
-
     console.error('nothing found');
 });
 
-onUnmounted(() => {});
+const computedComponents: Record<string, any> = reactive({
+    id: {
+        view: computed(() => FocusViewId),
+        props: computed(() => {
+            return { items: getIdBreadcrumbs() };
+        }),
+    },
+});
+
+function getIdBreadcrumbs(): { title: string; href?: string }[] {
+    if (!item.value) {
+        return [
+            {
+                title: 'no data',
+            },
+        ];
+    }
+
+    const crumbs: { title: string; href?: string }[] = [{ title: type.toString().toLowerCase() }];
+    if ('type' in item.value) {
+        crumbs.push({ title: (item.value.type as string).toLowerCase() });
+    }
+
+    if (item.value.name) {
+        crumbs.push({ title: item.value.name.toLowerCase() });
+    }
+
+    return crumbs;
+}
+
+function setItem(i: any): void {
+    item.value = i;
+    if (item.value) {
+        type = getType(item.value);
+    }
+}
+
+function getType(item: IIdentifiable): DataType {
+    if ('git' in item) {
+        return DataType.Updates;
+    }
+
+    if ('projects' in item) {
+        return DataType.Environments;
+    }
+
+    return DataType.Projects;
+}
 </script>

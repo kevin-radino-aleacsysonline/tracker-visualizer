@@ -3,7 +3,7 @@
         <panels-component :requested-objects="requestedData" :dataType></panels-component>
     </v-container>
     <v-container v-else class="text-center">
-        <v-label>Loading...</v-label>
+        <panels-loading-component :amount-panels="_.random(2, 5)"></panels-loading-component>
     </v-container>
 </template>
 
@@ -14,7 +14,7 @@ import { useRoute } from 'vue-router';
 import { eventBus } from '../events';
 import { DataType, IIdentifiable, QueryInfoType } from '../types';
 import { filterData, getFetchFunction } from '../controllers';
-import { PanelsComponent } from '../components';
+import { PanelsComponent, PanelsLoadingComponent } from '../components';
 
 var isLoading = ref(true);
 var fetchedData: Map<string, IIdentifiable> = new Map<string, IIdentifiable>();

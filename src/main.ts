@@ -1,7 +1,7 @@
 import App from './App.vue';
 import vuetify from './setup/vuetify';
-import { createApp } from 'vue';
 import router from './setup/router';
+import { createApp } from 'vue';
 
 import './scss/normalize.css';
 import './scss/styles.scss';
