@@ -7,7 +7,10 @@ import FilterChipListComponent from './FilterChipListComponent.vue';
 import FilterDialog from './FilterDialog.vue';
 import FilterToolBar from './FilterToolBar.vue';
 import FocusView from './FocusView.vue';
+import FocusViewDescription from './FocusViewDescription.vue';
 import FocusViewId from './FocusViewId.vue';
+import FocusViewReference from './FocusViewReference.vue';
+import FocusViewStringArray from './FocusViewStringArray.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
 import PanelEnvironmentProjectComponent from './PanelEnvironmentProjectComponent.vue';
 import PanelObjectComponent from './PanelObjectComponent.vue';
@@ -32,7 +35,10 @@ export {
     FilterDialog,
     FilterToolBar,
     FocusView,
+    FocusViewDescription,
     FocusViewId,
+    FocusViewReference,
+    FocusViewStringArray,
     LinkButtonComponent,
     PanelEnvironmentProjectComponent,
     PanelObjectComponent,

@@ -20,7 +20,6 @@ import { eventBus, OnQueryChangedArgs } from '../events';
 import { QueryInfoType } from '../types';
 import { clearRouteQuery } from '../controllers';
 import { FilterChipComponent } from '../components';
-import { FOCUS } from '../constants';
 
 const currentFilters: Ref<Map<QueryInfoType, any>> = ref(new Map<QueryInfoType, any>());
 
@@ -33,9 +32,6 @@ eventBus.on('onQueryChange', onQueryChangeHandler);
 
 onMounted(async () => {
     await router.isReady();
-    if (route.name === FOCUS) {
-        return;
-    }
     const query = route.query;
     Object.keys(query).forEach((key) => {
         const type = QueryInfoType[key as keyof typeof QueryInfoType];
