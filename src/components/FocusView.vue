@@ -1,5 +1,5 @@
 <template>
-    <v-label v-if="item !== null && item !== undefined" v-for="(key, value) in Object.entries(item)"> {{ key }}, {{ value }} </v-label>
+    <v-label v-if="item !== null && item !== undefined" v-for="key in Object.entries(item)"> {{ key[0] }}, {{ key[1] }}</v-label>
 </template>
 
 <script setup lang="ts">

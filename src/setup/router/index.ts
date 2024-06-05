@@ -48,19 +48,35 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-    // if (to.name === from.name) {
-    // if (to.query !== from.query) {
-    const gained = _.difference(_.keys(to.query), _.keys(from.query));
-    const lost = _.difference(_.keys(from.query), _.keys(to.query));
-    emitQueryChange(lost, from.query, true);
-    emitQueryChange(gained, to.query);
-    // TODO: When none gained and none lost => m.a.w. cluster-namespace_registry -> registry, same amount of queries
+    if (to.query !== from.query) {
+        const keysGained = getChangedKeys(to.query, from.query);
+        const keysLost = getChangedKeys(from.query, to.query);
+        if ((keysGained.length > 0 && keysLost.length <= 0) || keysGained.length === keysLost.length) {
+            // new query or update query
+            emitQueryAddOrRemove(keysGained, to.query);
+        }
 
-    // }
-    // }
+        if (keysGained.length <= 0 && keysLost.length > 0) {
+            // remove query
+            emitQueryAddOrRemove(keysLost, from.query, true);
+        }
+    }
 });
 
-function emitQueryChange(arr: string[], query: any, remove = false): void {
+function getChangedKeys(query1: any, query2: any): string[] {
+    return _.reduce(
+        query1,
+        (result: string[], value, key) => {
+            if (!_.isEqual(value, query2[key])) {
+                result.push(key);
+            }
+            return result;
+        },
+        []
+    );
+}
+
+function emitQueryAddOrRemove(arr: string[], query: any, remove = false): void {
     if (arr.length <= 0) {
         return;
     }
