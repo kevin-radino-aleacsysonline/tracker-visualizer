@@ -51,13 +51,21 @@ router.beforeEach((to, from) => {
     if (to.query !== from.query) {
         const keysGained = getChangedKeys(to.query, from.query);
         const keysLost = getChangedKeys(from.query, to.query);
+        // console.error('gained', keysGained);
+        // console.error('lost', keysLost);
         if ((keysGained.length > 0 && keysLost.length <= 0) || keysGained.length === keysLost.length) {
-            // new query or update query
+            // console.error('new or update');
             emitQueryAddOrRemove(keysGained, to.query);
         }
 
         if (keysGained.length <= 0 && keysLost.length > 0) {
-            // remove query
+            // console.error('remove');
+            emitQueryAddOrRemove(keysLost, from.query, true);
+        }
+
+        if (keysGained.length > 0 && keysLost.length > 0 && _.union(keysGained, keysLost).length === keysGained.length + keysLost.length) {
+            // console.error('gained and lost');
+            emitQueryAddOrRemove(keysGained, to.query);
             emitQueryAddOrRemove(keysLost, from.query, true);
         }
     }
