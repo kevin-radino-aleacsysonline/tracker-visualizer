@@ -1,56 +1,42 @@
 <template>
-    <v-container v-if="item !== null && item !== undefined">
+    <v-container v-if="!isLoading && item !== null && item !== undefined">
         <template v-for="key in orderedEntries" :key>
             <component v-if="key in computedComponents" :is="computedComponents[key].view" v-bind="computedComponents[key].props">
                 <template #title> {{ _.capitalize(key) }} </template>
             </component>
-            <!-- <v-label v-else>{{ key }}, </v-label> -->
         </template>
     </v-container>
+    <v-container v-else><focus-view-loading-component> </focus-view-loading-component></v-container>
 </template>
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { onMounted, Ref, computed, reactive, ref } from 'vue';
+import { onMounted, onUnmounted, Ref, computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { DataType, IIdentifiable, QueryInfoType, BreadcrumbsItemSlotType } from '../types';
 import { fetchAllData, formatDate } from '../controllers';
-import { FocusViewId, FocusViewObject, FocusViewDescription, FocusViewReference, FocusViewStringArray, FocusViewTimestampVersion } from '../components';
+import { FocusViewId, FocusViewObject, FocusViewDescription, FocusViewReference, FocusViewStringArray, FocusViewLoadingComponent, FocusViewTimestampVersion } from '../components';
 import { FOCUSSED_ITEM } from '../constants';
+import { eventBus, OnQueryChangedArgs } from '../events';
 
 var item: Ref<IIdentifiable | undefined> = ref(undefined);
 var type: DataType;
 const route = useRoute();
 const router = useRouter();
+const isLoading = ref(false);
 
 // TODO: loading and skeleton loader for this view
+eventBus.on('onQueryChange', onQueryChangeHandler);
 
 onMounted(async () => {
+    isLoading.value = true;
     await router.isReady();
-    const id = route.query[QueryInfoType.id]?.toString();
-    const itemString = localStorage.getItem(FOCUSSED_ITEM);
-    var tempItem: IIdentifiable | undefined = undefined;
-    tempItem = JSON.parse(itemString ?? '');
+    await initializeView();
+    isLoading.value = false;
+});
 
-    if (id && tempItem?.id === id) {
-        // loading data stored from other view
-        setItem(tempItem);
-        return;
-    }
-
-    const map = await fetchAllData();
-    if (id && map.has(id)) {
-        // loading data when not coming from other view
-        setItem(map.get(id));
-        return;
-    }
-
-    if (!id && tempItem) {
-        // loading previously visited data
-        setItem(tempItem);
-        return;
-    }
-    console.error('nothing found');
+onUnmounted(() => {
+    eventBus.off('onQueryChange', onQueryChangeHandler);
 });
 
 // TODO: link in Environment, repository in Project, link in Update
@@ -100,6 +86,33 @@ const computedComponents: Record<string, any> = reactive({
         }),
     },
 });
+
+async function initializeView(): Promise<void> {
+    const id = route.query[QueryInfoType.id]?.toString();
+    const itemString = localStorage.getItem(FOCUSSED_ITEM);
+    var tempItem: IIdentifiable | undefined = undefined;
+    tempItem = JSON.parse(itemString ?? '');
+
+    if (id && tempItem?.id === id) {
+        // loading data stored from other view
+        setItem(tempItem);
+        return;
+    }
+
+    const map = await fetchAllData();
+    if (id && map.has(id)) {
+        // loading data when not coming from other view
+        setItem(map.get(id));
+        return;
+    }
+
+    if (!id && tempItem) {
+        // loading previously visited data
+        setItem(tempItem);
+        return;
+    }
+    console.error('nothing found');
+}
 
 function getReferenceObject(prop: string, dataType?: DataType): { view: any; props: any } {
     return {
@@ -178,5 +191,19 @@ function getType(item: IIdentifiable): DataType {
     }
 
     return DataType.Projects;
+}
+
+async function onQueryChangeHandler(args: OnQueryChangedArgs): Promise<void> {
+    isLoading.value = true;
+    const id = args.data;
+    const map = await fetchAllData();
+    if (id && map.has(id)) {
+        // loading data when not coming from other view
+        setItem(map.get(id));
+        isLoading.value = false;
+
+        return;
+    }
+    isLoading.value = false;
 }
 </script>

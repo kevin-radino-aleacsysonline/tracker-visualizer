@@ -9,6 +9,7 @@ import FilterToolBar from './FilterToolBar.vue';
 import FocusView from './FocusView.vue';
 import FocusViewDescription from './FocusViewDescription.vue';
 import FocusViewId from './FocusViewId.vue';
+import FocusViewLoadingComponent from './FocusViewLoadingComponent.vue';
 import FocusViewObject from './FocusViewObject.vue';
 import FocusViewReference from './FocusViewReference.vue';
 import FocusViewStringArray from './FocusViewStringArray.vue';
@@ -39,6 +40,7 @@ export {
     FocusView,
     FocusViewDescription,
     FocusViewId,
+    FocusViewLoadingComponent,
     FocusViewObject,
     FocusViewReference,
     FocusViewStringArray,
