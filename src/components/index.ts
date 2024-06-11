@@ -9,8 +9,10 @@ import FilterToolBar from './FilterToolBar.vue';
 import FocusView from './FocusView.vue';
 import FocusViewDescription from './FocusViewDescription.vue';
 import FocusViewId from './FocusViewId.vue';
+import FocusViewObject from './FocusViewObject.vue';
 import FocusViewReference from './FocusViewReference.vue';
 import FocusViewStringArray from './FocusViewStringArray.vue';
+import FocusViewTimestampVersion from './FocusViewTimestampVersion.vue';
 import LinkButtonComponent from './LinkButtonComponent.vue';
 import PanelEnvironmentProjectComponent from './PanelEnvironmentProjectComponent.vue';
 import PanelObjectComponent from './PanelObjectComponent.vue';
@@ -37,8 +39,10 @@ export {
     FocusView,
     FocusViewDescription,
     FocusViewId,
+    FocusViewObject,
     FocusViewReference,
     FocusViewStringArray,
+    FocusViewTimestampVersion,
     LinkButtonComponent,
     PanelEnvironmentProjectComponent,
     PanelObjectComponent,

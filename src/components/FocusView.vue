@@ -4,7 +4,7 @@
             <component v-if="key in computedComponents" :is="computedComponents[key].view" v-bind="computedComponents[key].props">
                 <template #title> {{ _.capitalize(key) }} </template>
             </component>
-            <v-label v-else>{{ key }}, </v-label>
+            <!-- <v-label v-else>{{ key }}, </v-label> -->
         </template>
     </v-container>
 </template>
@@ -14,8 +14,8 @@ import _ from 'lodash';
 import { onMounted, Ref, computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { DataType, IIdentifiable, QueryInfoType, BreadcrumbsItemSlotType } from '../types';
-import { fetchAllData } from '../controllers';
-import { FocusViewId, FocusViewDescription, FocusViewReference, FocusViewStringArray } from '../components';
+import { fetchAllData, formatDate } from '../controllers';
+import { FocusViewId, FocusViewObject, FocusViewDescription, FocusViewReference, FocusViewStringArray, FocusViewTimestampVersion } from '../components';
 import { FOCUSSED_ITEM } from '../constants';
 
 var item: Ref<IIdentifiable | undefined> = ref(undefined);
@@ -53,8 +53,8 @@ onMounted(async () => {
     console.error('nothing found');
 });
 
-// TODO: link in Environment, repository in Project
-const desiredOrder = ['id', 'description', 'projects', 'updates', 'environments', 'versions', 'commits'];
+// TODO: link in Environment, repository in Project, link in Update
+const desiredOrder = ['id', 'description', 'projects', 'updates', 'environments', 'timestamp', 'versions', 'commits', 'version', 'environment', 'project', 'output', 'git'];
 
 const orderedEntries = computed(() => {
     if (!item.value) {
@@ -83,13 +83,29 @@ const computedComponents: Record<string, any> = reactive({
     environments: getReferenceObject('environments', DataType.Environments),
     versions: getStringArrayObject('versions'),
     commits: getStringArrayObject('commits'),
+    environment: getReferenceObject('environment', DataType.Environments),
+    project: getReferenceObject('project', DataType.Projects),
+    output: getObject('output'),
+    git: getObject('git'),
+    timestamp: {
+        view: computed(() => FocusViewTimestampVersion),
+        props: computed(() => {
+            return { data: formatDate(new Date((item.value as any)['timestamp'])), icon: 'mdi-clock-time-four-outline' };
+        }),
+    },
+    version: {
+        view: computed(() => FocusViewTimestampVersion),
+        props: computed(() => {
+            return { data: (item.value as any)['version'], icon: 'mdi-tag-outline' };
+        }),
+    },
 });
 
 function getReferenceObject(prop: string, dataType?: DataType): { view: any; props: any } {
     return {
         view: computed(() => FocusViewReference),
         props: computed(() => {
-            return { items: prop in item.value! ? (item.value as any)[prop] : ['test'], dataType };
+            return { items: getItems(prop), dataType, item: item.value };
         }),
     };
 }
@@ -98,7 +114,24 @@ function getStringArrayObject(prop: string): { view: any; props: any } {
     return {
         view: computed(() => FocusViewStringArray),
         props: computed(() => {
-            return { items: prop in item.value! ? (item.value as any)[prop] : ['test'] };
+            return { items: getItems(prop) };
+        }),
+    };
+}
+
+function getItems(prop: string): any[] {
+    let items = prop in item.value! ? (item.value as any)[prop] : ['undefined'];
+    if (!Array.isArray(items)) {
+        items = [items];
+    }
+    return items;
+}
+
+function getObject(prop: string): { view: any; props: any } {
+    return {
+        view: computed(() => FocusViewObject),
+        props: computed(() => {
+            return { object: (item.value as any)[prop] };
         }),
     };
 }
