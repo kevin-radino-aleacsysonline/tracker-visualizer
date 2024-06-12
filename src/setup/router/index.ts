@@ -51,8 +51,6 @@ router.beforeEach((to, from) => {
     if (to.query !== from.query) {
         const keysGained = getChangedKeys(to.query, from.query);
         const keysLost = getChangedKeys(from.query, to.query);
-        // console.error('gained', keysGained);
-        // console.error('lost', keysLost);
         if ((keysGained.length > 0 && keysLost.length <= 0) || keysGained.length === keysLost.length) {
             // console.error('new or update');
             emitQueryAddOrRemove(keysGained, to.query);
@@ -91,7 +89,6 @@ function emitQueryAddOrRemove(arr: string[], query: any, remove = false): void {
     for (let i = 0; i < arr.length; i++) {
         const type = arr[i] as QueryInfoType;
         if (type) {
-            // console.error(type, query[type], query, remove);
             eventBus.emit('onQueryChange', { type, data: query[type], remove });
         }
     }

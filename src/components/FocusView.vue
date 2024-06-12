@@ -6,7 +6,10 @@
             </component>
         </template>
     </v-container>
-    <v-container v-else><focus-view-loading-component> </focus-view-loading-component></v-container>
+    <v-container v-else>
+        <focus-view-loading-component v-if="isLoading"></focus-view-loading-component>
+        <v-label v-else>No such entry</v-label>
+    </v-container>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +28,6 @@ const route = useRoute();
 const router = useRouter();
 const isLoading = ref(false);
 
-// TODO: loading and skeleton loader for this view
 eventBus.on('onQueryChange', onQueryChangeHandler);
 
 onMounted(async () => {
@@ -106,9 +108,9 @@ async function initializeView(): Promise<void> {
         return;
     }
 
-    if (!id && tempItem) {
+    if (id && !map.has(id)) {
         // loading previously visited data
-        setItem(tempItem);
+        setItem(undefined);
         return;
     }
     console.error('nothing found');
@@ -118,7 +120,7 @@ function getReferenceObject(prop: string, dataType?: DataType): { view: any; pro
     return {
         view: computed(() => FocusViewReference),
         props: computed(() => {
-            return { items: getItems(prop), dataType, item: item.value };
+            return { items: getItems(prop), dataType };
         }),
     };
 }
@@ -200,9 +202,8 @@ async function onQueryChangeHandler(args: OnQueryChangedArgs): Promise<void> {
     if (id && map.has(id)) {
         // loading data when not coming from other view
         setItem(map.get(id));
-        isLoading.value = false;
-
-        return;
+    } else {
+        setItem(undefined);
     }
     isLoading.value = false;
 }

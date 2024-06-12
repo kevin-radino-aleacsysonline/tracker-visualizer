@@ -8,7 +8,7 @@
                         <v-list-item-title>{{ item.id ?? item }}</v-list-item-title>
                         <v-list-item-subtitle v-if="item.latest">latest: {{ item.latest }}</v-list-item-subtitle>
                         <template v-slot:prepend>
-                            <route-button-component class="button" :item :type="dataType!" :size="'x-small'"></route-button-component>
+                            <route-button-component :item class="button" :type="dataType!" :size="'x-small'"></route-button-component>
                         </template>
                     </v-list-item>
                 </template>
@@ -19,14 +19,12 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { DataType, IIdentifiable, Reference } from '../types';
+import { DataType, Reference } from '../types';
 import { RouteButtonComponent } from '../components';
 import { COLORS_VIEWS } from '../constants';
 
-// TODO: link the btn to another view
-
 const height = 64;
-const props = defineProps<{ items: Reference[] | undefined; dataType?: DataType; item: IIdentifiable }>();
+const props = defineProps<{ items: Reference[] | undefined; dataType?: DataType }>();
 const borderColorStyle = computed(() => {
     if (props.dataType && props.dataType in COLORS_VIEWS) {
         return { borderColor: COLORS_VIEWS[props.dataType] };

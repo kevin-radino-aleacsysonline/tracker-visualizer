@@ -11,8 +11,15 @@ import { FOCUSSED_ITEM } from '../constants';
 const props = defineProps<{ item: IIdentifiable; type: DataType; size?: string }>();
 
 function onButtonClick(): void {
-    localStorage.setItem(FOCUSSED_ITEM, JSON.stringify(props.item));
+    let id = '';
+    if (typeof props.item === 'string') {
+        localStorage.removeItem(FOCUSSED_ITEM);
+        id = props.item;
+    } else {
+        localStorage.setItem(FOCUSSED_ITEM, JSON.stringify(props.item));
+        id = props.item.id;
+    }
     clearRouteQuery();
-    refreshRouteWithQuery('focus', props.item.id, QueryInfoType.id);
+    refreshRouteWithQuery('focus', id, QueryInfoType.id);
 }
 </script>
