@@ -68,6 +68,7 @@ function formatType(obj: object) {
     }
 }
 
+// TODO: remove wait timers when project is live and not running localhost
 async function getDataFromAPI<T extends Project | Environment | Update>(path: string): Promise<Map<string, T>> {
     await wait(1000);
     const API_URL = 'http://localhost:3000/api';
