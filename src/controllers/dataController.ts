@@ -5,42 +5,8 @@ import { wait } from '../utils';
 import { IIdentifiable } from '../types/identifiable';
 import { DataType } from '../types/dataTypes';
 import { QueryInfoType } from '../types/queryInfoType';
-import * as updateData from '../data/updates.json';
-import * as projectData from '../data/projects.json';
 import _ from 'lodash';
 import axios from 'axios';
-
-async function fetchData<T extends IIdentifiable>(dataType: DataType): Promise<Map<string, T>> {
-    const jsonData = (await getDataByType(dataType)) as object[];
-    const dataArray: Map<string, T> = new Map<string, T>();
-
-    for (let i = 0; i < jsonData.length; i++) {
-        const element = jsonData[i] as T;
-        if (!dataArray.has(element.id)) {
-            dataArray.set(element.id, element);
-        }
-    }
-    return dataArray;
-}
-
-const API_URL = 'http://localhost:3000';
-async function getDataByType(dataType: DataType): Promise<object[]> {
-    try {
-        switch (dataType) {
-            case DataType.Environments:
-                const response = await axios.get(`${API_URL}/api/environments`);
-                return response.data;
-            case DataType.Projects:
-                return projectData.projects;
-            case DataType.Updates:
-                return updateData.updates;
-        }
-    } catch (e) {
-        console.error(e);
-    }
-
-    return [];
-}
 
 export function filterData(toFilter: IIdentifiable[], queryTypes: QueryInfoType[], filterValues: string[]): IIdentifiable[] {
     if (queryTypes.length !== filterValues.length) {
@@ -73,62 +39,62 @@ function filter(toFilter: IIdentifiable[], queryType: QueryInfoType, filter: str
     return filteredData;
 }
 
-function mapEnvironmentData(dataToMap: object[]): Map<string, Environment> {
-    const mappedData: Map<string, Environment> = new Map<string, Environment>();
+function mapData<T extends Project | Environment | Update>(dataToMap: object[]): Map<string, T> {
+    const mappedData: Map<string, T> = new Map<string, T>();
     for (let i = 0; i < dataToMap.length; i++) {
-        const environment = dataToMap[i] as Environment;
-        environment.type = (environment.type as any)[0];
-        if (!mappedData.has(environment.id)) {
-            mappedData.set(environment.id, environment);
+        const element = dataToMap[i] as T;
+        formatType(element);
+        if (!mappedData.has(element.id)) {
+            mappedData.set(element.id, element);
         }
-
-        if ('_id' in environment) {
-            delete environment._id;
-        }
-
-        if ('__v' in environment) {
-            delete environment.__v;
-        }
+        removeUnusedProperties(element);
     }
     return mappedData;
 }
 
-async function getEnvironments(): Promise<Map<string, Environment>> {
-    let environments = new Map<string, Environment>();
-    try {
-        const response = await axios.get(`${API_URL}/api/environments`);
-        environments = mapEnvironmentData(response.data);
-    } catch (error) {
-        console.error(error);
+function removeUnusedProperties(obj: object) {
+    if ('_id' in obj) {
+        delete obj._id;
     }
-    return environments;
+
+    if ('__v' in obj) {
+        delete obj.__v;
+    }
 }
 
-async function getProjects(): Promise<Map<string, Project>> {
-    await wait(2000);
-    return fetchData<Project>(DataType.Projects);
+function formatType(obj: object) {
+    if ('type' in obj) {
+        obj.type = (obj.type as any)[0];
+    }
 }
 
-async function getUpdates(): Promise<Map<string, Update>> {
-    await wait(2000);
-    return fetchData<Update>(DataType.Updates);
+async function getDataFromAPI<T extends Project | Environment | Update>(path: string): Promise<Map<string, T>> {
+    const API_URL = 'http://localhost:3000/api';
+    let data = new Map<string, T>();
+    try {
+        const response = await axios.get(`${API_URL}/${path}`);
+        data = mapData<T>(response.data);
+    } catch (err) {
+        console.error(err);
+    }
+    return data;
 }
 
 export function getFetchFunction(dataType: DataType): Promise<Map<string, IIdentifiable>> {
     if (dataType === DataType.Environments) {
-        return getEnvironments();
+        return getDataFromAPI<Environment>('environments');
     } else if (dataType === DataType.Projects) {
-        return getProjects();
+        return getDataFromAPI<Project>('projects');
     } else {
-        return getUpdates();
+        return getDataFromAPI<Update>('updates');
     }
 }
 
 export async function fetchAllData(): Promise<Map<string, IIdentifiable>> {
     await wait(2000);
-    const environments = await fetchData<Environment>(DataType.Environments);
-    const projects = await fetchData<Project>(DataType.Projects);
-    const updates = await fetchData<Update>(DataType.Updates);
+    const environments = await getDataFromAPI<Environment>('environments');
+    const projects = await getDataFromAPI<Project>('projects');
+    const updates = await getDataFromAPI<Update>('updates');
     const combined = [...environments.values(), ...projects.values(), ...updates.values()].map((item) => [item.id, item] as const);
     return new Map<string, IIdentifiable>(combined);
 }
