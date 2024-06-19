@@ -69,6 +69,7 @@ function formatType(obj: object) {
 }
 
 async function getDataFromAPI<T extends Project | Environment | Update>(path: string): Promise<Map<string, T>> {
+    await wait(1000);
     const API_URL = 'http://localhost:3000/api';
     let data = new Map<string, T>();
     try {
