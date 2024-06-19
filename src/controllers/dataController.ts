@@ -7,11 +7,11 @@ import { DataType } from '../types/dataTypes';
 import { QueryInfoType } from '../types/queryInfoType';
 import * as updateData from '../data/updates.json';
 import * as projectData from '../data/projects.json';
-import * as environmentData from '../data/environments.json';
 import _ from 'lodash';
+import axios from 'axios';
 
 async function fetchData<T extends IIdentifiable>(dataType: DataType): Promise<Map<string, T>> {
-    const jsonData = getDataByType(dataType) as object[];
+    const jsonData = (await getDataByType(dataType)) as object[];
     const dataArray: Map<string, T> = new Map<string, T>();
 
     for (let i = 0; i < jsonData.length; i++) {
@@ -21,6 +21,25 @@ async function fetchData<T extends IIdentifiable>(dataType: DataType): Promise<M
         }
     }
     return dataArray;
+}
+
+const API_URL = 'http://localhost:3000';
+async function getDataByType(dataType: DataType): Promise<object[]> {
+    try {
+        switch (dataType) {
+            case DataType.Environments:
+                const response = await axios.get(`${API_URL}/api/environments`);
+                return response.data;
+            case DataType.Projects:
+                return projectData.projects;
+            case DataType.Updates:
+                return updateData.updates;
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+    return [];
 }
 
 export function filterData(toFilter: IIdentifiable[], queryTypes: QueryInfoType[], filterValues: string[]): IIdentifiable[] {
@@ -54,20 +73,35 @@ function filter(toFilter: IIdentifiable[], queryType: QueryInfoType, filter: str
     return filteredData;
 }
 
-function getDataByType(dataType: DataType): object[] {
-    switch (dataType) {
-        case DataType.Environments:
-            return environmentData.environments;
-        case DataType.Projects:
-            return projectData.projects;
-        case DataType.Updates:
-            return updateData.updates;
+function mapEnvironmentData(dataToMap: object[]): Map<string, Environment> {
+    const mappedData: Map<string, Environment> = new Map<string, Environment>();
+    for (let i = 0; i < dataToMap.length; i++) {
+        const environment = dataToMap[i] as Environment;
+        environment.type = (environment.type as any)[0];
+        if (!mappedData.has(environment.id)) {
+            mappedData.set(environment.id, environment);
+        }
+
+        if ('_id' in environment) {
+            delete environment._id;
+        }
+
+        if ('__v' in environment) {
+            delete environment.__v;
+        }
     }
+    return mappedData;
 }
 
 async function getEnvironments(): Promise<Map<string, Environment>> {
-    await wait(2000);
-    return fetchData<Environment>(DataType.Environments);
+    let environments = new Map<string, Environment>();
+    try {
+        const response = await axios.get(`${API_URL}/api/environments`);
+        environments = mapEnvironmentData(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+    return environments;
 }
 
 async function getProjects(): Promise<Map<string, Project>> {
