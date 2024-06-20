@@ -2,6 +2,12 @@
     <v-container v-if="!isLoading">
         <panels-component :requested-objects="requestedData" :dataType></panels-component>
     </v-container>
+    <v-container v-else-if="errorLoading">
+        <v-alert type="error">
+            <v-alert-title>API Error</v-alert-title>
+            Error: Could not fetch data
+        </v-alert>
+    </v-container>
     <v-container v-else class="text-center">
         <panels-loading-component :amount-panels="_.random(2, 5)"></panels-loading-component>
     </v-container>
@@ -17,6 +23,7 @@ import { filterData, getFetchFunction } from '../controllers';
 import { PanelsComponent, PanelsLoadingComponent } from '../components';
 
 var isLoading = ref(true);
+var errorLoading = ref(false);
 var fetchedData: Map<string, IIdentifiable> = new Map<string, IIdentifiable>();
 var requestedData: Ref<IIdentifiable[]> = ref([]);
 const route = useRoute();
@@ -37,8 +44,13 @@ watch(route, async () => {
 });
 
 async function fetchData(refreshData = true): Promise<void> {
+    errorLoading.value = false;
     if (refreshData) {
         fetchedData = await getFetchFunction(props.dataType);
+    }
+    if (fetchedData.size === 0) {
+        errorLoading.value = true;
+        return;
     }
     requestedData.value = [];
     fetchedData.forEach((value) => {
