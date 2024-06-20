@@ -31,7 +31,7 @@ function filter(toFilter: IIdentifiable[], queryType: QueryInfoType, filter: str
     toFilter.forEach((value) => {
         if (queryType in value) {
             const objValue = (value as any)[queryType];
-            if (filter.includes(objValue)) {
+            if (filter === objValue) {
                 filteredData.push(value);
             }
         }
