@@ -34,7 +34,7 @@ import { Reference, QueryInfoType } from '../types';
 import { refreshRouteWithQuery, addOrRemoveData } from '../controllers';
 import { ValueCardComponent } from '../components';
 
-const props = defineProps<{ expand: boolean; dataArray: []; type: string; routeTo: string }>();
+const props = defineProps<{ expand: boolean; dataArray: any[]; type: string; routeTo: string }>();
 const route = useRoute();
 var panels: Ref<number[]> = ref([0]);
 

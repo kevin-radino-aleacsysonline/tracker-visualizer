@@ -37,7 +37,7 @@ import { InfoType } from '../types/infoTypes';
 import { ArrayViewComponent, CustomObjectComponent } from '../components';
 import { HIDDEN_ID_IN_TABLE_ARR } from '../constants';
 
-defineProps<{ type: InfoType; value?: string; valueArray?: []; valueObject?: object }>();
+defineProps<{ type: InfoType; value?: string; valueArray?: any[]; valueObject?: object }>();
 </script>
 
 <style scoped>

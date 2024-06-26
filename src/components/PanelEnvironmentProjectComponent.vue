@@ -6,7 +6,6 @@
 import { useRoute } from 'vue-router';
 import { Environment, Project, getDataTypeByRouteName } from '../types';
 import { PanelObjectComponent } from '../components';
-
 const props = defineProps<{ objects: Environment[] | Project[] }>();
 const route = useRoute();
 </script>
